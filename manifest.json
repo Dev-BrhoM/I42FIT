@@ -6,6 +6,6 @@
   "start_url": "gym-app.html",
   "display": "standalone",
   "background_color": "#F5F4EE",
-  "theme_color": "#1675B5",
+  "theme_color": "#086BA8",
   "icons": [{ "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }]
 }

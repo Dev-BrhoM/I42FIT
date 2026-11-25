@@ -1,5 +1,5 @@
 // I42FIT v1.1 — scoped offline cache
-const VERSION = 'i42-v7';
+const VERSION = 'i42-v8';
 const SHELL = ['index.html','gym-app.html','manifest.json','icon.png'];
 const EXTRA = ['https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js'];
 const scope = new URL(self.registration.scope);
