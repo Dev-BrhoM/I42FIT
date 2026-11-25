@@ -470,7 +470,7 @@ Object.values(libGroups).flat().forEach(([ar,en]) => { KEY[ar] = en; KEY[en] = e
 Object.values(programs).flat().forEach(e => { KEY[e[0]] = e[1]; if (e[6]) KEY[e[6].toLowerCase()] = e[1]; });
 Object.assign(KEY, { 'بنش برس بالبار':'bench press', 'ضغط أكتاف بالدمبل':'overhead press', 'سحب أمامي (لات بول داون)':'lat pulldown',
   'رفرفة أمامية (ليق إكستنشن)':'leg extension', 'ثني خلفي (ليق كيرل)':'leg curl' });
-const keyOf = name => { const k = KEY[name] || KEY[String(name).toLowerCase().trim()]; return typeof k === 'string' ? k : ''; };
+const keyOf = name => { const normalized = String(name).toLowerCase().trim(); const k = Object.prototype.hasOwnProperty.call(KEY,name) ? KEY[name] : Object.prototype.hasOwnProperty.call(KEY,normalized) ? KEY[normalized] : ''; return typeof k === 'string' ? k : ''; };
 const vidId = (name, key) => { const id = VID[key || keyOf(name)]; return typeof id === 'string' && /^[\w-]{11}$/.test(id) ? id : ''; };
 function vidFor(name, key){
   const k = key || keyOf(name);
@@ -614,17 +614,20 @@ function showTarget(){
 const OFF = 'https://world.openfoodfacts.org';
 const FIELDS = 'code,product_name,product_name_ar,product_name_en,brands,serving_size,serving_quantity,image_front_small_url,nutriments';
 let results = [], lastStatus = '', searchSequence = 0;
-const foodJSON = async url => { const response = await fetch(url); if (!response.ok) throw Error('HTTP '+response.status); return response.json(); };
+const foodJSON = async (url, allowMissing=false) => { const response = await fetch(url); if(allowMissing && response.status===404) return {}; if (!response.ok) throw Error('HTTP '+response.status); return response.json(); };
 const num = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
 function toFood(p){
   const n = p.nutriments || {};
-  const kcal = n['energy-kcal_100g'] ?? (n['energy_100g'] ? n['energy_100g'] / 4.184 : null);
-  if (kcal == null) return null;
+  const nutrient = v => v === null || v === undefined || String(v).trim()==='' || !Number.isFinite(Number(v)) || Number(v)<0 ? null : Number(v);
+  const kj = nutrient(n['energy_100g']);
+  const kcal = nutrient(n['energy-kcal_100g']) ?? (kj===null ? null : kj/4.184);
+  const pro = nutrient(n.proteins_100g), carb = nutrient(n.carbohydrates_100g), fat = nutrient(n.fat_100g);
+  if (kcal===null || [pro,carb,fat].some(v=>v===null)) return null;
   return {
     code: p.code, names: { ar: p.product_name_ar || p.product_name || p.product_name_en, en: p.product_name_en || p.product_name || p.product_name_ar },
     brand: (p.brands || '').split(',')[0].trim(), img: p.image_front_small_url || '',
     serving: num(p.serving_quantity) || 100,
-    per100: { kcal: num(kcal), pro: num(n.proteins_100g), carb: num(n.carbohydrates_100g), fat: num(n.fat_100g) }
+    per100: { kcal, pro, carb, fat }
   };
 }
 const foodName = f => f.names[lang] || t('noName');
@@ -636,7 +639,7 @@ $('#foodForm').onsubmit = async ev => {
   try {
     let products;
     if (/^\d{8,14}$/.test(q)) {
-      const r = await foodJSON(`${OFF}/api/v2/product/${q}.json?fields=${FIELDS}`);
+      const r = await foodJSON(`${OFF}/api/v2/product/${q}.json?fields=${FIELDS}`, true);
       products = r.product ? [r.product] : [];
     } else {
       const url = `${OFF}/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=24&fields=${FIELDS}`;
@@ -727,8 +730,8 @@ function renderLog(){
     $('#p'+id).style.width = goal && goal[k] ? Math.min(100, sum[k]/goal[k]*100) + '%' : '0';
   });
 }
-$('#logBody').onclick = ev => { const i = ev.target.dataset.rm; if (i !== undefined){ const oldDate = logDate; syncDay(); if(oldDate !== logDate) return; log.splice(i,1); saveLog(); } };
-$('#clearLog').onclick = () => { syncDay(); if (confirm(t('clearConfirm'))) { syncDay(); log = []; saveLog(); } };
+$('#logBody').onclick = ev => { const i = ev.target.dataset.rm; if (i !== undefined){ const oldDate = logDate; syncDay(); if(oldDate !== logDate || !/^\d+$/.test(i) || +i >= log.length) return; log.splice(i,1); saveLog(); } };
+$('#clearLog').onclick = () => { syncDay(); const confirmedDate = logDate; if (confirm(t('clearConfirm'))) { syncDay(); if(logDate !== confirmedDate) return; log = []; saveLog(); } };
 
 // ===== العمل بدون إنترنت =====
 const net = () => { $('#netPill').hidden = navigator.onLine; };
@@ -742,7 +745,7 @@ const finiteNonnegative = v => typeof v === 'number' && Number.isFinite(v) && v 
 function validBackupValue(k,v){
   if(k==='lang') return ['ar','en'].includes(v);
   if(k==='theme') return v===null || ['light','dark'].includes(v);
-  if(k==='prog') return Object.hasOwn(programs,v) || Object.hasOwn(OLD_PROG,v);
+  if(k==='prog') return typeof v==='string' && (Object.prototype.hasOwnProperty.call(programs,v) || Object.prototype.hasOwnProperty.call(OLD_PROG,v));
   if(k==='target') return v && ['kcal','pro','carb','fat'].every(x=>finiteNonnegative(v[x]));
   if(k==='exercises') return Array.isArray(v) && v.every(e=>e && typeof e.name==='string' && typeof e.muscle==='string' && typeof e.equip==='string' && (e.video===undefined || typeof e.video==='string') && (e.key===undefined || typeof e.key==='string') && (e.ar===undefined || typeof e.ar==='string') && (e.en===undefined || typeof e.en==='string') && [e.sets,e.reps].every(x=>['number','string'].includes(typeof x)&&Number.isInteger(+x)&&+x>0) && ['string','number'].includes(typeof e.weight) && Number.isFinite(+e.weight)&&+e.weight>=0);
   return Array.isArray(v) && v.every(e=>e && typeof e.name==='string' && typeof e.brand==='string' && ['g','kcal','pro','carb','fat'].every(x=>finiteNonnegative(e[x])) && e.g>0);
