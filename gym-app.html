@@ -77,6 +77,23 @@ a{color:var(--accent)}
 .prog{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
 .prog .info{flex:1;min-width:0}
 .prog .n{width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:600;font-size:.85rem;flex:none}
+.ico{display:block;width:30px;height:30px;margin:0 auto 2px}
+.ico svg{width:100%;height:100%;overflow:visible}
+.flame{transform-origin:12px 20px;animation:flick 1.4s ease-in-out infinite}
+.flame2{transform-origin:12px 18px;animation:flick 1s ease-in-out infinite reverse}
+@keyframes flick{0%,100%{transform:scale(1,1)}50%{transform:scale(.92,1.08)}}
+.lift{animation:lift 1.6s ease-in-out infinite}
+@keyframes lift{0%,100%{transform:translateY(2px)}50%{transform:translateY(-3px)}}
+.sway{transform-origin:12px 22px;animation:sway 2.4s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+.sway .g1,.sway .g2,.sway .g3{animation:grain 2.4s ease-in-out infinite}
+.sway .g2{animation-delay:.2s}.sway .g3{animation-delay:.4s}
+@keyframes grain{0%,100%{opacity:1}50%{opacity:.75}}
+.drip{transform-origin:12px 20px;animation:drip 2s cubic-bezier(.5,0,.5,1) infinite}
+@keyframes drip{0%{transform:translateY(-3px) scale(1,1)}55%{transform:translateY(1px) scale(1,1)}70%{transform:translateY(1px) scale(1.12,.86)}85%{transform:translateY(0) scale(.96,1.05)}100%{transform:translateY(-3px) scale(1,1)}}
+.puddle{transform-origin:12px 22px;animation:puddle 2s ease-in-out infinite}
+@keyframes puddle{0%,50%,100%{transform:scaleX(.7);opacity:.2}70%{transform:scaleX(1.15);opacity:.45}}
+@media (prefers-reduced-motion:reduce){.ico *{animation:none!important}}
 .pill{background:var(--accent-soft);color:var(--accent);font-size:.8rem;font-weight:600;padding:4px 10px;border-radius:99px}
 .scanbtn{display:grid;place-items:center;padding:10px 14px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-end;justify-content:center;z-index:50}
@@ -151,8 +168,14 @@ a{color:var(--accent)}
 
     <div id="myVideos"></div>
 
-    <h3 style="margin:24px 0 12px">مكتبة الفيديو</h3>
-    <div class="grid" id="vidGrid"></div>
+    <div class="card">
+      <h3>مكتبة التمارين</h3>
+      <p class="meta" style="margin:4px 0 12px">كل تمرين يفتح شروحاته على قناة Jeff Nippard في يوتيوب.</p>
+      <div class="chips" id="libChips"></div>
+      <input id="libSearch" placeholder="ابحث عن تمرين…" style="margin:12px 0 4px">
+      <div id="libList"></div>
+      <a class="btn" href="https://www.youtube.com/@JeffNippard/videos" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;margin-top:12px">كل فيديوهات القناة</a>
+    </div>
   </section>
 
   <!-- التغذية -->
@@ -171,9 +194,9 @@ a{color:var(--accent)}
         <button class="btn" type="submit">احسب</button>
       </form>
       <div class="stats">
-        <div class="stat"><b id="cKcal">—</b>سعرة</div>
-        <div class="stat"><b id="cPro">—</b>بروتين (غ)</div>
-        <div class="stat"><b id="cCarb">—</b>كارب (غ)</div>
+        <div class="stat"><span class="ico" data-ico="kcal"></span><b id="cKcal">—</b>سعرة</div>
+        <div class="stat"><span class="ico" data-ico="pro"></span><b id="cPro">—</b>بروتين (غ)</div>
+        <div class="stat"><span class="ico" data-ico="carb"></span><b id="cCarb">—</b>كارب (غ)</div>
       </div>
     </div>
 
@@ -197,10 +220,10 @@ a{color:var(--accent)}
         <button class="ghost" id="clearLog">مسح اليوم</button>
       </div>
       <div class="stats" style="grid-template-columns:repeat(4,1fr)">
-        <div class="stat"><b id="tKcal">0</b>سعرة<div class="bar"><i id="pKcal"></i></div></div>
-        <div class="stat"><b id="tPro">0</b>بروتين غ<div class="bar"><i id="pPro"></i></div></div>
-        <div class="stat"><b id="tCarb">0</b>كارب غ<div class="bar"><i id="pCarb"></i></div></div>
-        <div class="stat"><b id="tFat">0</b>دهون غ<div class="bar"><i id="pFat"></i></div></div>
+        <div class="stat"><span class="ico" data-ico="kcal"></span><b id="tKcal">0</b>سعرة<div class="bar"><i id="pKcal"></i></div></div>
+        <div class="stat"><span class="ico" data-ico="pro"></span><b id="tPro">0</b>بروتين غ<div class="bar"><i id="pPro"></i></div></div>
+        <div class="stat"><span class="ico" data-ico="carb"></span><b id="tCarb">0</b>كارب غ<div class="bar"><i id="pCarb"></i></div></div>
+        <div class="stat"><span class="ico" data-ico="fat"></span><b id="tFat">0</b>دهون غ<div class="bar"><i id="pFat"></i></div></div>
       </div>
       <div class="tablewrap" style="margin-top:12px"><table>
         <thead><tr><th>الطعام</th><th>الشركة</th><th>الكمية</th><th>سعرات</th><th>ب</th><th>ك</th><th>د</th><th></th></tr></thead>
@@ -269,7 +292,7 @@ function renderEx(){
   $('#exBody').innerHTML = ex.length ? ex.map((e,i) => `<tr>
     <td><b>${esc(e.name)}</b></td><td><span class="tag">${esc(e.muscle)}</span></td><td>${esc(e.equip)}</td>
     <td>${e.weight ? esc(e.weight)+' كجم' : '—'}</td><td>${esc(e.sets)} × ${esc(e.reps)}</td>
-    <td><a href="${ytId(e.video) ? 'https://youtu.be/'+ytId(e.video) : ytSearch('طريقة أداء تمرين '+e.name)}" target="_blank" rel="noopener">▶</a></td>
+    <td><a href="${ytId(e.video) ? 'https://youtu.be/'+ytId(e.video) : vidFor(e.name)}" target="_blank" rel="noopener">▶</a></td>
     <td><button class="ghost" data-del="${i}">حذف</button></td></tr>`).join('')
     : '<tr><td colspan="7" class="empty">لا توجد تمارين بعد — أضف أول تمرين من الأعلى</td></tr>';
   $('#sCount').textContent = ex.length;
@@ -285,7 +308,6 @@ $('#exForm').onsubmit = ev => {
   store.set('exercises', ex); ev.target.reset(); renderEx();
 };
 $('#exBody').onclick = ev => { const i = ev.target.dataset.del; if (i !== undefined){ ex.splice(i,1); store.set('exercises', ex); renderEx(); } };
-renderEx();
 
 // ===== البرامج الجاهزة =====
 // [الاسم، العضلة، المعدة، المجموعات، التكرارات]
@@ -314,7 +336,7 @@ function renderProg(){
   $('#progDesc').textContent = programs[prog].desc;
   $('#progList').innerHTML = programs[prog].list.map((e,i) => `<div class="prog"><span class="n">${(i+1).toLocaleString('ar')}</span>
     <div class="info"><b>${e[0]}</b><div class="meta">${e[2]} · ${e[3]} × ${e[4]}</div></div>
-    <a class="ghost" href="${ytSearch('طريقة أداء تمرين '+e[0])}" target="_blank" rel="noopener" style="text-decoration:none;padding:6px 10px">▶</a>
+    <a class="ghost" href="${vidFor(e[0])}" target="_blank" rel="noopener" style="text-decoration:none;padding:6px 10px">▶</a>
     <button class="ghost" data-pi="${i}">+ أضف</button></div>`).join('');
 }
 $('#progChips').onclick = ev => { if (ev.target.dataset.p){ prog = ev.target.dataset.p; store.set('prog', prog); renderProg(); } };
@@ -327,22 +349,64 @@ $('#progAll').onclick = () => {
   ex = programs[prog].list.map(toEx).concat(ex); store.set('exercises', ex); renderEx();
   $('#progAll').textContent = '✓ أُضيف — عدّل الأوزان من السجل'; setTimeout(() => $('#progAll').textContent = 'أضف البرنامج كاملاً للسجل', 1800);
 };
-renderProg();
 
-// video library (opens YouTube search for each topic)
-const lib = [
-  ['الصدر','بنش برس بالبار','طريقة أداء بنش برس الصحيحة'],
-  ['الظهر','سحب أمامي (لات بول داون)','طريقة أداء تمرين لات بول داون'],
-  ['الأرجل','سكوات بالبار','طريقة أداء السكوات الصحيحة'],
-  ['الأكتاف','ضغط أكتاف بالدمبل','تمرين ضغط الأكتاف بالدمبل'],
-  ['الذراعين','بايسبس كيرل','طريقة أداء تمرين البايسبس'],
-  ['البطن','بلانك','طريقة أداء تمرين البلانك'],
-];
+// ===== مكتبة التمارين — روابط لقناة Jeff Nippard =====
+const libGroups = {
+  'الصدر': [['بنش برس','bench press'],['بنش مائل','incline press'],['بنش بالدمبل','dumbbell press'],['تفتيح صدر كيبل','cable fly'],['ديبس','dips'],['ضغط (بوش أب)','push up'],['تفتيح بالجهاز','pec deck']],
+  'الظهر': [['ديدلفت','deadlift'],['عقلة','pull up'],['سحب أمامي','lat pulldown'],['تجديف بالبار','barbell row'],['تجديف كيبل جالس','seated cable row'],['تجديف بالدمبل','dumbbell row'],['تي بار رو','t-bar row'],['بول أوفر','pullover']],
+  'الأرجل': [['سكوات','squat'],['رومانيان ديدلفت','romanian deadlift'],['ضغط أرجل','leg press'],['هاك سكوات','hack squat'],['بلغاري سبليت سكوات','bulgarian split squat'],['لانجز','lunge'],['ليق إكستنشن','leg extension'],['ليق كيرل','leg curl'],['هيب ثرست','hip thrust'],['سمانة','calf raise']],
+  'الأكتاف': [['ضغط أكتاف','overhead press'],['رفرفة جانبية','lateral raise'],['فيس بول','face pull'],['كتف خلفي','rear delt fly'],['شرغ (ترابيس)','shrug']],
+  'الذراعين': [['بايسبس كيرل','bicep curl'],['هامر كيرل','hammer curl'],['بريتشر كيرل','preacher curl'],['ترايسبس بوش داون','tricep pushdown'],['ترايسبس فوق الرأس','overhead tricep extension'],['سكل كراشر','skull crusher']],
+  'البطن': [['بلانك','plank'],['كرنش كيبل','cable crunch'],['رفع أرجل معلق','hanging leg raise'],['آب رولر','ab wheel']],
+};
+const jeff = q => 'https://www.youtube.com/@JeffNippard/search?query=' + encodeURIComponent(q);
+// خريطة الاسم العربي → الإنجليزي، تشمل أسماء البرامج الجاهزة
+const EN = Object.fromEntries(Object.values(libGroups).flat());
+Object.assign(EN, { 'بنش برس بالبار':'bench press', 'سكوات بالبار':'squat', 'ضغط أكتاف بالدمبل':'overhead press', 'سحب أمامي (لات بول داون)':'lat pulldown',
+  'بنش مائل بالدمبل':'incline press', 'عقلة / سحب أمامي':'pull up', 'بايسبس كيرل بالبار':'bicep curl', 'لانجز بالدمبل':'lunge',
+  'رفرفة أمامية (ليق إكستنشن)':'leg extension', 'ثني خلفي (ليق كيرل)':'leg curl', 'سمانة واقف':'calf raise', 'بلانك (ثواني)':'plank' });
+function vidFor(name){
+  if (EN[name]) return jeff(EN[name]);
+  if (/[a-z]/i.test(name)) return jeff(name);            // اسم مكتوب بالإنجليزي
+  return ytSearch('طريقة أداء تمرين ' + name);
+}
+let libTab = 'الكل';
+function renderLib(){
+  $('#libChips').innerHTML = ['الكل', ...Object.keys(libGroups)].map(k => `<button class="chip ${k===libTab?'on':''}" data-l="${k}">${k}</button>`).join('');
+  const q = $('#libSearch').value.trim().toLowerCase();
+  const rows = Object.entries(libGroups).filter(([g]) => libTab === 'الكل' || g === libTab)
+    .flatMap(([g, list]) => list.map(([ar, en]) => ({g, ar, en})))
+    .filter(e => !q || e.ar.includes(q) || e.en.includes(q));
+  $('#libList').innerHTML = rows.length ? rows.map(e => `<a class="prog" href="${jeff(e.en)}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+      <span class="n">▶</span><div class="info"><b>${e.ar}</b><div class="meta">${e.en} · ${e.g}</div></div></a>`).join('')
+    : '<p class="empty">لا يوجد تمرين بهذا الاسم</p>';
+}
+$('#libChips').onclick = ev => { if (ev.target.dataset.l){ libTab = ev.target.dataset.l; renderLib(); } };
+$('#libSearch').oninput = renderLib;
+renderLib();
+renderEx(); renderProg();
+
+// ===== أيقونات متحركة للماكروز =====
+const ICONS = {
+  // شعلة — السعرات
+  kcal: `<svg viewBox="0 0 24 24"><path class="flame" d="M12 2c1 3.5 5 5.5 5 10.5A5 5 0 0 1 7 12.5c0-2 1-3.5 2-4.5.2 1.6 1 2.6 2 3 0-3 0-6 1-9z" fill="#E8875F"/><path class="flame2" d="M12 11c.6 1.6 2.5 2.4 2.5 4.6a2.5 2.5 0 0 1-5 0c0-1.3.8-2.2 1.5-2.6 0-.9.4-1.5 1-2z" fill="#F7C873"/></svg>`,
+  // دمبل — البروتين
+  pro: `<svg viewBox="0 0 24 24" class="lift"><rect x="2" y="9" width="3" height="6" rx="1" fill="#D97757"/><rect x="5" y="7.5" width="2.5" height="9" rx="1" fill="#D97757"/><rect x="7.5" y="11" width="9" height="2" rx="1" fill="#B8A99A"/><rect x="16.5" y="7.5" width="2.5" height="9" rx="1" fill="#D97757"/><rect x="19" y="9" width="3" height="6" rx="1" fill="#D97757"/></svg>`,
+  // سنبلة قمح — الكارب
+  carb: `<svg viewBox="0 0 24 24"><g class="sway"><path d="M12 22V6" stroke="#C9A24A" stroke-width="1.6" stroke-linecap="round"/>
+    <ellipse class="g1" cx="9.6" cy="8" rx="1.6" ry="2.6" transform="rotate(-30 9.6 8)" fill="#E2B85C"/><ellipse class="g1" cx="14.4" cy="8" rx="1.6" ry="2.6" transform="rotate(30 14.4 8)" fill="#E2B85C"/>
+    <ellipse class="g2" cx="9.6" cy="12.5" rx="1.6" ry="2.6" transform="rotate(-30 9.6 12.5)" fill="#D9A646"/><ellipse class="g2" cx="14.4" cy="12.5" rx="1.6" ry="2.6" transform="rotate(30 14.4 12.5)" fill="#D9A646"/>
+    <ellipse class="g3" cx="9.6" cy="17" rx="1.6" ry="2.6" transform="rotate(-30 9.6 17)" fill="#C9963A"/><ellipse class="g3" cx="14.4" cy="17" rx="1.6" ry="2.6" transform="rotate(30 14.4 17)" fill="#C9963A"/>
+    <ellipse cx="12" cy="4.2" rx="1.4" ry="2.4" fill="#E2B85C"/></g></svg>`,
+  // قطرة زيت — الدهون
+  fat: `<svg viewBox="0 0 24 24"><g class="drip"><path d="M12 3c3 4.2 6 7.6 6 11a6 6 0 0 1-12 0c0-3.4 3-6.8 6-11z" fill="#E9B949"/><path d="M9.2 14.2a3 3 0 0 0 2.3 3" stroke="#FFF4D1" stroke-width="1.5" stroke-linecap="round" fill="none"/></g><ellipse class="puddle" cx="12" cy="22" rx="4" ry=".9" fill="#E9B949" opacity=".35"/></svg>`,
+};
+document.querySelectorAll('[data-ico]').forEach(el => el.innerHTML = ICONS[el.dataset.ico]);
+
 const vidCard = ([tag,title,q]) => `<div class="card">
   <a href="${ytSearch(q)}" target="_blank" rel="noopener" style="text-decoration:none">
     <div class="video" style="display:grid;place-items:center"><svg width="54" height="54" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="var(--accent)"/><path d="M10 8l6 4-6 4z" fill="#fff"/></svg></div></a>
   <div style="margin-top:10px"><span class="tag">${tag}</span><h3 style="margin-top:6px">${title}</h3></div></div>`;
-$('#vidGrid').innerHTML = lib.map(vidCard).join('');
 $('#nutVids').innerHTML = [
   ['تغذية','وجبة ما قبل التمرين','وجبة قبل التمرين'],
   ['تغذية','حساب الماكروز','طريقة حساب الماكروز للتنشيف والتضخيم'],
