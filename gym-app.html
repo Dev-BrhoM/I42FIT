@@ -108,7 +108,7 @@ a{color:var(--accent)}
 @keyframes drip{0%{transform:translateY(-3px) scale(1,1)}55%{transform:translateY(1px) scale(1,1)}70%{transform:translateY(1px) scale(1.12,.86)}85%{transform:translateY(0) scale(.96,1.05)}100%{transform:translateY(-3px) scale(1,1)}}
 .puddle{transform-origin:12px 22px;animation:puddle 2s ease-in-out infinite}
 @keyframes puddle{0%,50%,100%{transform:scaleX(.7);opacity:.2}70%{transform:scaleX(1.15);opacity:.45}}
-@media (prefers-reduced-motion:reduce){.ico *{animation:none!important}}
+@media (prefers-reduced-motion:reduce){ .ico *{animation:none!important} body,.bar i{transition:none!important}}
 .pill{background:var(--accent-soft);color:var(--accent);font-size:.8rem;font-weight:600;padding:4px 10px;border-radius:99px}
 .scanbtn{display:grid;place-items:center;padding:10px 14px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-end;justify-content:center;z-index:50}
@@ -172,8 +172,8 @@ a{color:var(--accent)}
         <label><span data-i18n="muscle"></span><select name="muscle" id="muscleSel"></select></label>
         <label><span data-i18n="equip"></span><select name="equip" id="equipSel"></select></label>
         <label><span data-i18n="weightKg"></span><input name="weight" type="number" min="0" step="0.5" placeholder="60"></label>
-        <label><span data-i18n="sets"></span><input name="sets" type="number" min="1" value="3"></label>
-        <label><span data-i18n="reps"></span><input name="reps" type="number" min="1" value="10"></label>
+        <label><span data-i18n="sets"></span><input name="sets" type="number" min="1" max="100" required value="3"></label>
+        <label><span data-i18n="reps"></span><input name="reps" type="number" min="1" max="3600" required value="10"></label>
         <label><span data-i18n="videoLink"></span><input name="video" type="url" data-i18n-ph="videoPh"></label>
         <button class="btn" type="submit" data-i18n="add"></button>
       </form>
@@ -212,9 +212,9 @@ a{color:var(--accent)}
     <div class="card">
       <h3 style="margin-bottom:12px" data-i18n="calc"></h3>
       <form id="calForm">
-        <label><span data-i18n="weightKg"></span><input name="w" type="number" value="75" required></label>
-        <label><span data-i18n="heightCm"></span><input name="h" type="number" value="175" required></label>
-        <label><span data-i18n="age"></span><input name="a" type="number" value="25" required></label>
+        <label><span data-i18n="weightKg"></span><input name="w" type="number" min="25" max="350" step="0.1" value="75" required></label>
+        <label><span data-i18n="heightCm"></span><input name="h" type="number" min="100" max="250" step="0.1" value="175" required></label>
+        <label><span data-i18n="age"></span><input name="a" type="number" min="18" max="100" value="25" required></label>
         <label><span data-i18n="sex"></span><select name="g"><option value="m" data-i18n="male"></option><option value="f" data-i18n="female"></option></select></label>
         <label><span data-i18n="goal"></span><select name="goal"><option value="-400" data-i18n="cut"></option><option value="0" data-i18n="maintain"></option><option value="300" data-i18n="bulk"></option></select></label>
         <button class="btn" type="submit" data-i18n="calculate"></button>
@@ -236,7 +236,7 @@ a{color:var(--accent)}
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M10 8v8M13 8v8M17 8v8"/></svg>
         </button>
       </form>
-      <div id="foodStatus" class="empty" style="display:none"></div>
+      <div id="foodStatus" role="status" aria-live="polite" class="empty" style="display:none"></div>
       <div id="foodResults"></div>
     </div>
 
@@ -275,10 +275,10 @@ a{color:var(--accent)}
   </div>
 </div>
 
-<div class="modal" id="playerModal" role="dialog">
+<div class="modal" id="playerModal" role="dialog" aria-modal="true" aria-labelledby="playerTitle">
   <div class="sheet" style="max-width:720px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px">
-      <h3 data-i18n="howTo"></h3>
+      <h3 id="playerTitle" data-i18n="howTo"></h3>
       <div style="display:flex;gap:6px">
         <a class="ghost" id="playerOpen" target="_blank" rel="noopener" style="text-decoration:none;display:grid;place-items:center">YouTube</a>
         <button class="ghost" id="playerClose" data-i18n="close"></button>
@@ -288,13 +288,13 @@ a{color:var(--accent)}
   </div>
 </div>
 
-<div class="modal" id="scanModal" role="dialog">
+<div class="modal" id="scanModal" role="dialog" aria-modal="true" aria-labelledby="scanTitleHeading">
   <div class="sheet">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <h3 data-i18n="scanTitle"></h3><button class="ghost" id="scanClose" data-i18n="close"></button>
+      <h3 id="scanTitleHeading" data-i18n="scanTitle"></h3><button class="ghost" id="scanClose" data-i18n="close"></button>
     </div>
     <div id="reader"></div>
-    <p class="meta" id="scanMsg" style="text-align:center;margin:10px 0"></p>
+    <p class="meta" id="scanMsg" role="status" aria-live="polite" style="text-align:center;margin:10px 0"></p>
     <label class="ghost" style="display:block;text-align:center;padding:10px;cursor:pointer">
       <span data-i18n="scanPhoto"></span>
       <input type="file" accept="image/*" capture="environment" id="scanFile" hidden>
@@ -514,7 +514,10 @@ function renderEx(){
 }
 $('#exForm').onsubmit = ev => {
   ev.preventDefault();
-  ex.unshift(Object.fromEntries(new FormData(ev.target)));
+  const entry = Object.fromEntries(new FormData(ev.target));
+  entry.name = entry.name.trim();
+  if(!entry.name || !Number.isInteger(+entry.sets) || +entry.sets < 1 || +entry.sets > 100 || !Number.isInteger(+entry.reps) || +entry.reps < 1 || +entry.reps > 3600 || (entry.weight !== '' && (!Number.isFinite(+entry.weight) || +entry.weight < 0 || +entry.weight > 2000))) { alert(lang === 'ar' ? 'تحقق من بيانات التمرين.' : 'Check the exercise details.'); return; }
+  ex.unshift(entry);
   store.set('exercises', ex); ev.target.reset(); renderEx();
 };
 $('#exBody').onclick = ev => { const i = ev.target.dataset.del; if (i !== undefined){ ex.splice(i,1); store.set('exercises', ex); renderEx(); } };
@@ -595,9 +598,11 @@ function renderNutStatic(){
 $('#calForm').onsubmit = ev => {
   ev.preventDefault();
   const f = Object.fromEntries(new FormData(ev.target));
+  if (![f.w,f.h,f.a].every(x => x !== '' && Number.isFinite(Number(x))) || +f.w < 25 || +f.w > 350 || +f.h < 100 || +f.h > 250 || +f.a < 18 || +f.a > 100 || !['m','f'].includes(f.g) || !['-400','0','300'].includes(f.goal)) return;
   const bmr = 10*f.w + 6.25*f.h - 5*f.a + (f.g === 'm' ? 5 : -161);
   const kcal = Math.round(bmr*1.55 + +f.goal), pro = Math.round(f.w*2), fat = Math.round(kcal*.25/9);
   const carb = Math.max(0, Math.round((kcal - pro*4 - fat*9)/4));
+  if (kcal < 1200 || pro*4 + fat*9 > kcal) { alert(lang === 'ar' ? 'الهدف المحسوب غير مناسب لهذه المدخلات. استشر مختصاً.' : 'The calculated target is unsuitable for these inputs. Consult a professional.'); return; }
   store.set('target', {kcal, pro, carb, fat}); showTarget(); renderLog();
 };
 function showTarget(){
@@ -651,7 +656,8 @@ function renderResults(){
 }
 $('#foodResults').onclick = ev => {
   const i = ev.target.dataset.add; if (i === undefined) return;
-  const f = results[i], g = num($('#g'+i).value); if (!g) return;
+  const f = results[i], g = num($('#g'+i).value); if (!f || !Number.isFinite(g) || g <= 0 || g > 100000) return;
+  syncDay();
   const k = g / 100;
   log.unshift({ name: foodName(f), brand: f.brand, g, kcal: f.per100.kcal*k, pro: f.per100.pro*k, carb: f.per100.carb*k, fat: f.per100.fat*k });
   saveLog(); ev.target.textContent = '✓'; setTimeout(() => ev.target.textContent = t('add'), 900);
@@ -701,9 +707,13 @@ $('#scanFile').onchange = async ev => {
 };
 
 // ===== سجل اليوم =====
-const today = () => new Date().toISOString().slice(0,10);
-let log = store.get('log-'+today(), []);
-function saveLog(){ store.set('log-'+today(), log); renderLog(); }
+const today = () => { const d = new Date(); return [d.getFullYear(), String(d.getMonth()+1).padStart(2,'0'), String(d.getDate()).padStart(2,'0')].join('-'); };
+let logDate = today(), log = store.get('log-'+logDate, []);
+function syncDay(){ const d = today(); if(d !== logDate){ logDate = d; log = store.get('log-'+d, []); renderLog(); } }
+function saveLog(){ store.set('log-'+logDate, log); renderLog(); }
+setInterval(syncDay, 15000);
+addEventListener('focus', syncDay);
+document.addEventListener('visibilitychange', () => { if(!document.hidden) syncDay(); });
 function renderLog(){
   $('#logBody').innerHTML = log.length ? log.map((e,i) => `<tr><td><b>${esc(e.name)}</b></td><td>${esc(e.brand)||'—'}</td><td>${fmt(e.g)}${t('g')}</td>
     <td>${fmt(e.kcal)}</td><td>${fmt(e.pro)}</td><td>${fmt(e.carb)}</td><td>${fmt(e.fat)}</td><td><button class="ghost" data-rm="${i}">${t('del')}</button></td></tr>`).join('')
@@ -715,8 +725,8 @@ function renderLog(){
     $('#p'+id).style.width = goal && goal[k] ? Math.min(100, sum[k]/goal[k]*100) + '%' : '0';
   });
 }
-$('#logBody').onclick = ev => { const i = ev.target.dataset.rm; if (i !== undefined){ log.splice(i,1); saveLog(); } };
-$('#clearLog').onclick = () => { if (confirm(t('clearConfirm'))) { log = []; saveLog(); } };
+$('#logBody').onclick = ev => { const i = ev.target.dataset.rm; if (i !== undefined){ const oldDate = logDate; syncDay(); if(oldDate !== logDate) return; log.splice(i,1); saveLog(); } };
+$('#clearLog').onclick = () => { syncDay(); if (confirm(t('clearConfirm'))) { syncDay(); log = []; saveLog(); } };
 
 // ===== العمل بدون إنترنت =====
 const net = () => { $('#netPill').hidden = navigator.onLine; };
@@ -725,15 +735,38 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.ser
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
 
 // ===== نسخة احتياطية =====
+const backupKey = k => ['lang','theme','prog','exercises','target'].includes(k) || /^log-\d{4}-\d{2}-\d{2}$/.test(k);
+const finiteNonnegative = v => typeof v === 'number' && Number.isFinite(v) && v >= 0;
+function validBackupValue(k,v){
+  if(k==='lang') return ['ar','en'].includes(v);
+  if(k==='theme') return v===null || ['light','dark'].includes(v);
+  if(k==='prog') return Object.hasOwn(programs,v) || Object.hasOwn(OLD_PROG,v);
+  if(k==='target') return v && ['kcal','pro','carb','fat'].every(x=>finiteNonnegative(v[x]));
+  if(k==='exercises') return Array.isArray(v) && v.every(e=>e && typeof e.name==='string' && typeof e.muscle==='string' && typeof e.equip==='string' && (e.video===undefined || typeof e.video==='string') && (e.key===undefined || typeof e.key==='string') && (e.ar===undefined || typeof e.ar==='string') && (e.en===undefined || typeof e.en==='string') && [e.sets,e.reps].every(x=>['number','string'].includes(typeof x)&&Number.isInteger(+x)&&+x>0) && ['string','number'].includes(typeof e.weight) && Number.isFinite(+e.weight)&&+e.weight>=0);
+  return Array.isArray(v) && v.every(e=>e && typeof e.name==='string' && typeof e.brand==='string' && ['g','kcal','pro','carb','fat'].every(x=>finiteNonnegative(e[x])) && e.g>0);
+}
 $('#exportBtn').onclick = () => {
-  const data = {}; try { for (let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); data[k] = localStorage.getItem(k); } } catch(e){}
+  const data = {}; try { for (let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); if (backupKey(k)) data[k] = localStorage.getItem(k); } } catch(e){}
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(data)], {type:'application/json'}));
+  a.href = URL.createObjectURL(new Blob([JSON.stringify({app:'I42FIT',version:1,data})], {type:'application/json'}));
   a.download = `I42FIT-backup-${today()}.json`; a.click(); URL.revokeObjectURL(a.href);
 };
 $('#importFile').onchange = async ev => {
   const f = ev.target.files[0]; if (!f) return;
-  try { const data = JSON.parse(await f.text()); Object.entries(data).forEach(([k,v]) => localStorage.setItem(k, v)); location.reload(); }
+  try {
+    if(f.size > 10*1024*1024) throw Error('size');
+    const parsed = JSON.parse(await f.text());
+    if(!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw Error('format');
+    if(Object.hasOwn(parsed,'app') && (parsed.app!=='I42FIT' || parsed.version!==1)) throw Error('version');
+    const data = parsed.app==='I42FIT' ? parsed.data : parsed;
+    if(!data || typeof data!=='object' || Array.isArray(data)) throw Error('data');
+    const entries = Object.entries(data).filter(([k])=>backupKey(k));
+    if(!entries.length || !entries.every(([k,v])=>typeof v==='string' && validBackupValue(k,JSON.parse(v)))) throw Error('invalid');
+    const before = entries.map(([k])=>[k,localStorage.getItem(k)]);
+    try { entries.forEach(([k,v])=>localStorage.setItem(k,v)); }
+    catch(e){ before.forEach(([k,v])=>{try{if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v);}catch(_){} }); throw e; }
+    location.reload();
+  }
   catch(e){ alert(t('badFile')); }
 };
 
