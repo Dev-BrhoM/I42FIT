@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="I42FIT">
 <meta name="theme-color" content="#F5F4EE" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#262624" media="(prefers-color-scheme: dark)">
-<link rel="apple-touch-icon" href="icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" href="icon.png">
 <link rel="manifest" href="manifest.json">
 <title>I42FIT</title>
@@ -38,7 +38,6 @@
 body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.7;transition:background .25s,color .25s}
 .wrap{max-width:920px;margin:0 auto;padding:calc(24px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(80px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left))}
 html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
-input,select{font-size:16px} /* يمنع التكبير التلقائي في iOS */
 .tab,.btn,.ghost{min-height:44px;touch-action:manipulation}
 @media (max-width:520px){ .stats{grid-template-columns:repeat(3,1fr)} .stat b{font-size:1.15rem} th,td{padding:8px 6px;font-size:.88rem} }
 header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px;flex-wrap:wrap}
@@ -59,12 +58,12 @@ h2{font-size:1.5rem;margin-bottom:6px} h3{font-size:1.1rem}
 .tab.on{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .panel{display:none}.panel.on{display:block}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:14px}
 .video{aspect-ratio:16/9;width:100%;border:0;border-radius:10px;background:var(--surface2)}
 .tag{display:inline-block;background:var(--accent-soft);color:var(--accent);font-size:.8rem;padding:2px 10px;border-radius:99px;font-weight:600}
 form{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
 label{font-size:.85rem;color:var(--muted);display:flex;flex-direction:column;gap:4px}
-input,select{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 10px;width:100%}
+input,select{font:inherit;font-size:16px;min-width:0;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 10px;width:100%}
 input:focus,select:focus{outline:2px solid var(--accent);outline-offset:-1px}
 .btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:9px;padding:10px 18px;font:600 1rem var(--sans);cursor:pointer;align-self:end}
 .btn:hover{filter:brightness(.95)}
@@ -111,10 +110,16 @@ a{color:var(--accent)}
 @keyframes puddle{0%,50%,100%{transform:scaleX(.7);opacity:.2}70%{transform:scaleX(1.15);opacity:.45}}
 @media (prefers-reduced-motion:reduce){ .ico *{animation:none!important} body,.bar i{transition:none!important}}
 .pill{background:var(--accent-soft);color:var(--accent);font-size:.8rem;font-weight:600;padding:4px 10px;border-radius:99px}
+#foodForm{grid-template-columns:minmax(0,1fr) auto auto}
+@media (max-width:360px){
+  #foodForm{grid-template-columns:minmax(0,1fr) auto}
+  #foodForm label{grid-column:1/-1}
+}
+@media (pointer:coarse){.chip,.seg button{min-height:44px;min-width:44px}}
 .scanbtn{display:grid;place-items:center;padding:10px 14px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-end;justify-content:center;z-index:50}
 .modal.on{display:flex}
-.sheet{background:var(--surface);width:100%;max-width:480px;border-radius:18px 18px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
+.sheet{background:var(--surface);width:100%;max-width:480px;border-radius:18px 18px 0 0;max-height:calc(100% - env(safe-area-inset-top));overflow:auto;overscroll-behavior:contain;padding:18px max(16px,env(safe-area-inset-right)) calc(18px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
 @media (min-width:600px){ .modal{align-items:center} .sheet{border-radius:18px} }
 #reader{width:100%;border-radius:12px;overflow:hidden;background:#000;min-height:200px}
 #reader video{width:100%!important;display:block}
@@ -230,7 +235,7 @@ a{color:var(--accent)}
     <div class="card">
       <h3 style="margin-bottom:4px" data-i18n="foodSearch"></h3>
       <p class="sub" style="margin-bottom:12px;font-size:.9rem" data-i18n="foodSearchSub"></p>
-      <form id="foodForm" style="grid-template-columns:1fr auto auto">
+      <form id="foodForm">
         <label><span data-i18n="foodQ"></span><input name="q" required data-i18n-ph="foodPh"></label>
         <button class="btn" type="submit" data-i18n="search"></button>
         <button class="btn scanbtn" type="button" id="scanBtn" data-i18n-aria="scanTitle">
@@ -301,10 +306,8 @@ a{color:var(--accent)}
     </div>
     <div id="reader"></div>
     <p class="meta" id="scanMsg" role="status" aria-live="polite" style="text-align:center;margin:10px 0"></p>
-    <label class="ghost" style="display:block;text-align:center;padding:10px;cursor:pointer">
-      <span data-i18n="scanPhoto"></span>
-      <input type="file" accept="image/*" capture="environment" id="scanFile" hidden>
-    </label>
+    <button class="ghost" type="button" id="scanPhotoBtn" data-i18n="scanPhoto"></button>
+    <input type="file" accept="image/*" id="scanFile" hidden>
   </div>
 </div>
 
@@ -343,7 +346,7 @@ ar: {
   per100:'لكل ١٠٠غ', P:'ب', C:'ك', F:'د', g:'غ', grams:'الكمية بالغرام', noName:'بدون اسم',
   todayLog:'سجل اليوم', clearToday:'مسح اليوم', clearConfirm:'مسح سجل اليوم؟', noFood:'لم تسجّل أي طعام اليوم',
   thFood:'الطعام', thBrand:'الشركة', thQty:'الكمية',
-  scanTitle:'امسح الباركود', scanPhoto:'أو التقط صورة للباركود', scanAim:'وجّه الكاميرا نحو باركود المنتج',
+  scanTitle:'امسح الباركود', scanPhoto:'اختر صورة الباركود', scanAim:'وجّه الكاميرا نحو باركود المنتج',
   scanLoadErr:'تعذّر تحميل الماسح — تحقق من الإنترنت', scanCamErr:'لا يمكن تشغيل الكاميرا هنا (تحتاج إذن الكاميرا ورابط https). استخدم خيار التقاط صورة بالأسفل.',
   scanReading:'جارٍ قراءة الصورة…', scanNone:'لم يُعثر على باركود في الصورة، حاول مرة أخرى بإضاءة أفضل',
   nutVideos:'فيديوهات التغذية', meal:'وجبة', tagNut:'تغذية',
@@ -378,7 +381,7 @@ en: {
   per100:'per 100g', P:'P', C:'C', F:'F', g:'g', grams:'Amount in grams', noName:'Unnamed',
   todayLog:'Today\'s log', clearToday:'Clear today', clearConfirm:'Clear today\'s log?', noFood:'Nothing logged today',
   thFood:'Food', thBrand:'Brand', thQty:'Amount',
-  scanTitle:'Scan barcode', scanPhoto:'Or take a photo of the barcode', scanAim:'Point the camera at the product barcode',
+  scanTitle:'Scan barcode', scanPhoto:'Choose a barcode photo', scanAim:'Point the camera at the product barcode',
   scanLoadErr:'Couldn\'t load the scanner — check your connection', scanCamErr:'Can\'t start the camera here (needs camera permission and an https link). Use the photo option below.',
   scanReading:'Reading photo…', scanNone:'No barcode found in the photo. Try again with better light.',
   nutVideos:'Nutrition videos', meal:'Meal', tagNut:'Nutrition',
@@ -772,7 +775,7 @@ $('#foodResults').onclick = ev => {
 };
 
 // ===== ماسح الباركود =====
-let scanner = null, scanKey = 'scanAim';
+let scanner = null, scanKey = 'scanAim', cameraStart, cameraStop, readingPhoto = false;
 const scanMsg = k => { scanKey = k; $('#scanMsg').textContent = t(k); };
 function makeScanner(){
   const F = Html5QrcodeSupportedFormats;
@@ -786,32 +789,55 @@ function onCode(code){
   $('#foodForm input[name=q]').value = code.trim();
   $('#foodForm').requestSubmit();
 }
+function scanIsOpen(){ return $('#scanModal').classList.contains('on'); }
 async function openScan(){
+  if (scanIsOpen() || readingPhoto || cameraStop) return;
   $('#scanModal').classList.add('on');
   if (typeof Html5Qrcode === 'undefined'){ scanMsg('scanLoadErr'); return; }
+  if (!navigator.mediaDevices?.getUserMedia){ scanMsg('scanCamErr'); return; }
   scanMsg('scanAim');
   scanner = scanner || makeScanner();
   try {
-    await scanner.start({ facingMode: 'environment' },
+    cameraStart = scanner.start({ facingMode: 'environment' },
       { fps: 10, qrbox: (w,h) => ({ width: Math.min(300, w*0.85), height: Math.min(150, h*0.5) }) },
-      onCode, () => {});
-  } catch(e){ scanMsg('scanCamErr'); }
+      code => { if (scanIsOpen() && !readingPhoto) onCode(code); }, () => {});
+    await cameraStart;
+  } catch(e){ if (scanIsOpen() && !readingPhoto) scanMsg('scanCamErr'); }
+  finally { cameraStart = null; }
 }
-async function closeScan(){
+async function stopScanCamera(){
+  if (!cameraStart && !scanner?.isScanning) return;
+  if (!cameraStop) {
+    cameraStop = (async () => {
+      try { await cameraStart; } catch(e){}
+      try { if (scanner?.isScanning) await scanner.stop(); } catch(e){}
+    })().finally(() => { cameraStop = null; });
+  }
+  await cameraStop;
+}
+function closeScan(){
   $('#scanModal').classList.remove('on');
-  try { if (scanner && scanner.isScanning) await scanner.stop(); } catch(e){}
+  return stopScanCamera();
 }
 $('#scanBtn').onclick = openScan;
 $('#scanClose').onclick = closeScan;
 $('#scanModal').onclick = ev => { if (ev.target.id === 'scanModal') closeScan(); };
+addEventListener('pagehide', closeScan);
+$('#scanPhotoBtn').onclick = () => $('#scanFile').click();
 $('#scanFile').onchange = async ev => {
   const file = ev.target.files[0]; ev.target.value = '';
-  if (!file || typeof Html5Qrcode === 'undefined') return;
-  try { if (scanner && scanner.isScanning) await scanner.stop(); } catch(e){}
-  scanner = scanner || makeScanner();
+  if (!file || typeof Html5Qrcode === 'undefined' || readingPhoto) return;
+  readingPhoto = true;
+  $('#scanPhotoBtn').disabled = true;
   scanMsg('scanReading');
-  try { onCode(await scanner.scanFile(file, false)); }
-  catch(e){ scanMsg('scanNone'); }
+  try {
+    await stopScanCamera();
+    if (!scanIsOpen()) return;
+    scanner = scanner || makeScanner();
+    const code = await scanner.scanFile(file, false);
+    if (scanIsOpen()) onCode(code);
+  } catch(e){ if (scanIsOpen()) scanMsg('scanNone'); }
+  finally { readingPhoto = false; $('#scanPhotoBtn').disabled = false; }
 };
 
 // ===== سجل اليوم =====
