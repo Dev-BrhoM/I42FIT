@@ -470,8 +470,8 @@ Object.values(libGroups).flat().forEach(([ar,en]) => { KEY[ar] = en; KEY[en] = e
 Object.values(programs).flat().forEach(e => { KEY[e[0]] = e[1]; if (e[6]) KEY[e[6].toLowerCase()] = e[1]; });
 Object.assign(KEY, { 'بنش برس بالبار':'bench press', 'ضغط أكتاف بالدمبل':'overhead press', 'سحب أمامي (لات بول داون)':'lat pulldown',
   'رفرفة أمامية (ليق إكستنشن)':'leg extension', 'ثني خلفي (ليق كيرل)':'leg curl' });
-const keyOf = name => KEY[name] || KEY[String(name).toLowerCase().trim()] || '';
-const vidId = (name, key) => VID[key || keyOf(name)] || '';
+const keyOf = name => { const k = KEY[name] || KEY[String(name).toLowerCase().trim()]; return typeof k === 'string' ? k : ''; };
+const vidId = (name, key) => { const id = VID[key || keyOf(name)]; return typeof id === 'string' && /^[\w-]{11}$/.test(id) ? id : ''; };
 function vidFor(name, key){
   const k = key || keyOf(name);
   if (k) return jeff(k);
@@ -613,7 +613,8 @@ function showTarget(){
 // ===== البحث عن الأطعمة (Open Food Facts) =====
 const OFF = 'https://world.openfoodfacts.org';
 const FIELDS = 'code,product_name,product_name_ar,product_name_en,brands,serving_size,serving_quantity,image_front_small_url,nutriments';
-let results = [], lastStatus = '';
+let results = [], lastStatus = '', searchSequence = 0;
+const foodJSON = async url => { const response = await fetch(url); if (!response.ok) throw Error('HTTP '+response.status); return response.json(); };
 const num = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
 function toFood(p){
   const n = p.nutriments || {};
@@ -631,20 +632,21 @@ function status(key){ lastStatus = key || ''; const s = $('#foodStatus'); s.styl
 $('#foodForm').onsubmit = async ev => {
   ev.preventDefault();
   const q = new FormData(ev.target).get('q').trim();
-  $('#foodResults').innerHTML = ''; status('searching');
+  const sequence = ++searchSequence; results = []; $('#foodResults').innerHTML = ''; status('searching');
   try {
     let products;
     if (/^\d{8,14}$/.test(q)) {
-      const r = await fetch(`${OFF}/api/v2/product/${q}.json?fields=${FIELDS}`).then(r => r.json());
+      const r = await foodJSON(`${OFF}/api/v2/product/${q}.json?fields=${FIELDS}`);
       products = r.product ? [r.product] : [];
     } else {
       const url = `${OFF}/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=24&fields=${FIELDS}`;
-      products = (await fetch(url).then(r => r.json())).products || [];
+      products = (await foodJSON(url)).products || [];
     }
+    if(sequence !== searchSequence) return;
     results = products.map(toFood).filter(Boolean);
     status(results.length ? '' : 'noResults');
     renderResults();
-  } catch(e){ status('netErr'); }
+  } catch(e){ if(sequence === searchSequence) status('netErr'); }
 };
 function renderResults(){
   $('#foodResults').innerHTML = results.map((f,i) => `<div class="food">
