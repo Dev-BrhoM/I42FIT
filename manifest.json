@@ -1,0 +1,11 @@
+{
+  "name": "I42",
+  "short_name": "I42",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "gym-app.html",
+  "display": "standalone",
+  "background_color": "#F5F4EE",
+  "theme_color": "#D97757",
+  "icons": [{ "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }]
+}

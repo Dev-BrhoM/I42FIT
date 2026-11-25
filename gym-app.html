@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="I42">
+<meta name="theme-color" content="#F5F4EE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#262624" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+<title>I42</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F4EE; --surface:#FFFFFF; --surface2:#EFEDE4; --text:#1F1E1D; --muted:#6B6A63;
+  --line:#E3E0D5; --accent:#D97757; --accent-ink:#FFFFFF; --accent-soft:#F6E3DA;
+  --serif:"Noto Naskh Arabic", Georgia, serif; --sans:"IBM Plex Sans Arabic", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#262624; --surface:#30302E; --surface2:#3A3A37; --text:#F2F0E8; --muted:#A6A39A;
+  --line:#45443F; --accent:#D97757; --accent-soft:#4A3329; } }
+:root[data-theme="dark"]{ --bg:#262624; --surface:#30302E; --surface2:#3A3A37; --text:#F2F0E8; --muted:#A6A39A; --line:#45443F; --accent-soft:#4A3329; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.7}
+.wrap{max-width:920px;margin:0 auto;padding:calc(24px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(80px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left))}
+html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+input,select{font-size:16px} /* يمنع التكبير التلقائي في iOS */
+.tab,.btn,.ghost{min-height:44px;touch-action:manipulation}
+@media (max-width:520px){ .stats{grid-template-columns:repeat(3,1fr)} .stat b{font-size:1.15rem} th,td{padding:8px 6px;font-size:.88rem} }
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:34px;height:34px;color:var(--accent)}
+h1,h2,h3{font-family:var(--serif);font-weight:600;margin:0}
+h1{font-size:1.6rem} h2{font-size:1.5rem;margin-bottom:6px} h3{font-size:1.1rem}
+.sub{color:var(--muted);margin:0 0 20px}
+.tabs{display:flex;gap:6px;background:var(--surface2);padding:5px;border-radius:12px;margin-bottom:24px}
+.tab{flex:1;border:0;background:transparent;color:var(--muted);font:600 1rem var(--sans);padding:10px;border-radius:9px;cursor:pointer}
+.tab.on{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.panel{display:none}.panel.on{display:block}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.video{aspect-ratio:16/9;width:100%;border:0;border-radius:10px;background:var(--surface2)}
+.tag{display:inline-block;background:var(--accent-soft);color:var(--accent);font-size:.8rem;padding:2px 10px;border-radius:99px;font-weight:600}
+form{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+label{font-size:.85rem;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+input,select{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 10px;width:100%}
+input:focus,select:focus{outline:2px solid var(--accent);outline-offset:-1px}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:9px;padding:10px 18px;font:600 1rem var(--sans);cursor:pointer;align-self:end}
+.btn:hover{filter:brightness(.95)}
+.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:4px 10px;cursor:pointer;font:inherit}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+th,td{text-align:right;padding:10px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:500;font-size:.85rem}
+.tablewrap{overflow-x:auto}
+.empty{color:var(--muted);text-align:center;padding:20px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.stat{background:var(--surface2);border-radius:10px;padding:10px;text-align:center}
+.stat b{display:block;font-family:var(--serif);font-size:1.4rem;color:var(--accent)}
+.meal ul{margin:6px 0 0;padding-inline-start:18px;color:var(--muted)}
+a{color:var(--accent)}
+.food{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.food img,.food .ph{width:52px;height:52px;border-radius:9px;object-fit:cover;background:var(--surface2);flex:none}
+.food .info{flex:1;min-width:0}
+.food .info b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.food .meta{color:var(--muted);font-size:.82rem}
+.food .add{display:flex;gap:6px;align-items:center;flex:none}
+.food .add input{width:76px;padding:7px}
+.food .add .btn{padding:8px 12px;min-height:40px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:99px;padding:8px 16px;font:600 .95rem var(--sans);cursor:pointer;min-height:40px}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.prog{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.prog .info{flex:1;min-width:0}
+.prog .n{width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:600;font-size:.85rem;flex:none}
+.pill{background:var(--accent-soft);color:var(--accent);font-size:.8rem;font-weight:600;padding:4px 10px;border-radius:99px}
+.scanbtn{display:grid;place-items:center;padding:10px 14px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-end;justify-content:center;z-index:50}
+.modal.on{display:flex}
+.sheet{background:var(--surface);width:100%;max-width:480px;border-radius:18px 18px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom))}
+@media (min-width:600px){ .modal{align-items:center} .sheet{border-radius:18px} }
+#reader{width:100%;border-radius:12px;overflow:hidden;background:#000;min-height:200px}
+#reader video{width:100%!important;display:block}
+.meta{color:var(--muted);font-size:.85rem}
+.bar{height:5px;background:var(--line);border-radius:9px;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+@media (max-width:520px){ .food{flex-wrap:wrap} .food .add{width:100%} .food .add input{flex:1;width:auto} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.6 6.2L20 6l-4.4 4.9L22 12l-6.4 1.1L20 18l-6.4-2.2L12 22l-1.6-6.2L4 18l4.4-4.9L2 12l6.4-1.1L4 6l6.4 2.2z"/></svg>
+      <h1>I42</h1>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="pill" id="netPill" hidden>بدون إنترنت</span>
+      <button class="ghost" id="themeBtn">الوضع</button>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab on" data-t="workout">التمارين</button>
+    <button class="tab" data-t="nutrition">التغذية</button>
+  </div>
+
+  <!-- التمارين -->
+  <section class="panel on" id="workout">
+    <h2>التمارين</h2>
+    <p class="sub">شاهد طريقة الأداء الصحيحة، وسجّل تمارينك بالأوزان والمعدات.</p>
+
+    <div class="card">
+      <h3 style="margin-bottom:10px">البرامج الجاهزة</h3>
+      <div class="chips" id="progChips"></div>
+      <p class="meta" id="progDesc" style="margin:10px 0 4px"></p>
+      <div id="progList"></div>
+      <button class="btn" id="progAll" style="margin-top:12px;width:100%">أضف البرنامج كاملاً للسجل</button>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:12px">إضافة تمرين</h3>
+      <form id="exForm">
+        <label>اسم التمرين<input name="name" required placeholder="مثال: بنش برس"></label>
+        <label>العضلة<select name="muscle"><option>الصدر</option><option>الظهر</option><option>الأرجل</option><option>الأكتاف</option><option>الذراعين</option><option>البطن</option><option>كارديو</option></select></label>
+        <label>المعدة / الجهاز<select name="equip"><option>بار حديد</option><option>دمبل</option><option>جهاز كيبل</option><option>جهاز سميث</option><option>جهاز ضغط أرجل</option><option>وزن الجسم</option><option>كيتل بل</option><option>جهاز مشي</option></select></label>
+        <label>الوزن (كجم)<input name="weight" type="number" min="0" step="0.5" placeholder="60"></label>
+        <label>المجموعات<input name="sets" type="number" min="1" value="3"></label>
+        <label>التكرارات<input name="reps" type="number" min="1" value="10"></label>
+        <label>رابط فيديو (اختياري)<input name="video" type="url" placeholder="رابط يوتيوب"></label>
+        <button class="btn" type="submit">إضافة</button>
+      </form>
+      <div class="stats">
+        <div class="stat"><b id="sCount">0</b>تمارين</div>
+        <div class="stat"><b id="sSets">0</b>مجموعات</div>
+        <div class="stat"><b id="sVol">0</b>الحجم (كجم)</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:8px">سجل تمارينك</h3>
+      <div class="tablewrap"><table>
+        <thead><tr><th>التمرين</th><th>العضلة</th><th>المعدة</th><th>الوزن</th><th>مج × تكرار</th><th>فيديو</th><th></th></tr></thead>
+        <tbody id="exBody"></tbody>
+      </table></div>
+    </div>
+
+    <div id="myVideos"></div>
+
+    <h3 style="margin:24px 0 12px">مكتبة الفيديو</h3>
+    <div class="grid" id="vidGrid"></div>
+  </section>
+
+  <!-- التغذية -->
+  <section class="panel" id="nutrition">
+    <h2>التغذية</h2>
+    <p class="sub">احسب احتياجك اليومي واتبع وجبات متوازنة.</p>
+
+    <div class="card">
+      <h3 style="margin-bottom:12px">حاسبة السعرات</h3>
+      <form id="calForm">
+        <label>الوزن (كجم)<input name="w" type="number" value="75" required></label>
+        <label>الطول (سم)<input name="h" type="number" value="175" required></label>
+        <label>العمر<input name="a" type="number" value="25" required></label>
+        <label>الجنس<select name="g"><option value="m">ذكر</option><option value="f">أنثى</option></select></label>
+        <label>الهدف<select name="goal"><option value="-400">خسارة دهون</option><option value="0">ثبات</option><option value="300">بناء عضل</option></select></label>
+        <button class="btn" type="submit">احسب</button>
+      </form>
+      <div class="stats">
+        <div class="stat"><b id="cKcal">—</b>سعرة</div>
+        <div class="stat"><b id="cPro">—</b>بروتين (غ)</div>
+        <div class="stat"><b id="cCarb">—</b>كارب (غ)</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-bottom:4px">البحث عن الأطعمة</h3>
+      <p class="sub" style="margin-bottom:12px;font-size:.9rem">ابحث بالاسم أو الشركة أو رقم الباركود. البيانات من Open Food Facts.</p>
+      <form id="foodForm" style="grid-template-columns:1fr auto auto">
+        <label>اسم الطعام / الشركة / الباركود<input name="q" required placeholder="مثال: المراعي لبن، nutella، 6281007…"></label>
+        <button class="btn" type="submit">بحث</button>
+        <button class="btn scanbtn" type="button" id="scanBtn" aria-label="مسح الباركود بالكاميرا">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M10 8v8M13 8v8M17 8v8"/></svg>
+        </button>
+      </form>
+      <div id="foodStatus" class="empty" style="display:none"></div>
+      <div id="foodResults"></div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <h3>سجل اليوم</h3>
+        <button class="ghost" id="clearLog">مسح اليوم</button>
+      </div>
+      <div class="stats" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat"><b id="tKcal">0</b>سعرة<div class="bar"><i id="pKcal"></i></div></div>
+        <div class="stat"><b id="tPro">0</b>بروتين غ<div class="bar"><i id="pPro"></i></div></div>
+        <div class="stat"><b id="tCarb">0</b>كارب غ<div class="bar"><i id="pCarb"></i></div></div>
+        <div class="stat"><b id="tFat">0</b>دهون غ<div class="bar"><i id="pFat"></i></div></div>
+      </div>
+      <div class="tablewrap" style="margin-top:12px"><table>
+        <thead><tr><th>الطعام</th><th>الشركة</th><th>الكمية</th><th>سعرات</th><th>ب</th><th>ك</th><th>د</th><th></th></tr></thead>
+        <tbody id="logBody"></tbody>
+      </table></div>
+    </div>
+
+    <div class="grid" id="meals"></div>
+
+    <h3 style="margin:24px 0 12px">فيديوهات التغذية</h3>
+    <div class="grid" id="nutVids"></div>
+  </section>
+</div>
+
+<div class="wrap" style="padding-top:0">
+  <div class="card">
+    <h3>بياناتك</h3>
+    <p class="meta" style="margin:4px 0 12px">كل تمارينك وأكلك محفوظة على جهازك فقط. خذ نسخة احتياطية لنقلها لجهاز آخر.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" id="exportBtn">حفظ نسخة احتياطية</button>
+      <label class="ghost" style="display:grid;place-items:center;padding:8px 16px;cursor:pointer">استرجاع نسخة<input type="file" accept="application/json,.json" id="importFile" hidden></label>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="scanModal" role="dialog" aria-label="ماسح الباركود">
+  <div class="sheet">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h3>امسح الباركود</h3><button class="ghost" id="scanClose">إغلاق</button>
+    </div>
+    <div id="reader"></div>
+    <p class="meta" id="scanMsg" style="text-align:center;margin:10px 0">وجّه الكاميرا نحو باركود المنتج</p>
+    <label class="ghost" style="display:block;text-align:center;padding:10px;cursor:pointer">
+      أو التقط صورة للباركود
+      <input type="file" accept="image/*" capture="environment" id="scanFile" hidden>
+    </label>
+  </div>
+</div>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const store = {
+  get(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d }catch(e){ return d } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)) }catch(e){} }
+};
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function ytId(url){ const m = String(url||'').match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/); return m ? m[1] : null; }
+const ytSearch = q => 'https://www.youtube.com/results?search_query=' + encodeURIComponent(q);
+
+// tabs
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('on', p.id === b.dataset.t));
+});
+// theme
+$('#themeBtn').onclick = () => {
+  const r = document.documentElement, dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  r.dataset.theme = dark ? 'light' : 'dark'; store.set('theme', r.dataset.theme);
+};
+if (store.get('theme')) document.documentElement.dataset.theme = store.get('theme');
+
+// exercises
+let ex = store.get('exercises', []);
+function renderEx(){
+  $('#exBody').innerHTML = ex.length ? ex.map((e,i) => `<tr>
+    <td><b>${esc(e.name)}</b></td><td><span class="tag">${esc(e.muscle)}</span></td><td>${esc(e.equip)}</td>
+    <td>${e.weight ? esc(e.weight)+' كجم' : '—'}</td><td>${esc(e.sets)} × ${esc(e.reps)}</td>
+    <td><a href="${ytId(e.video) ? 'https://youtu.be/'+ytId(e.video) : ytSearch('طريقة أداء تمرين '+e.name)}" target="_blank" rel="noopener">▶</a></td>
+    <td><button class="ghost" data-del="${i}">حذف</button></td></tr>`).join('')
+    : '<tr><td colspan="7" class="empty">لا توجد تمارين بعد — أضف أول تمرين من الأعلى</td></tr>';
+  $('#sCount').textContent = ex.length;
+  $('#sSets').textContent = ex.reduce((a,e) => a + +e.sets, 0);
+  $('#sVol').textContent = ex.reduce((a,e) => a + (+e.weight||0) * e.sets * e.reps, 0).toLocaleString('ar');
+  const vids = ex.filter(e => ytId(e.video));
+  $('#myVideos').innerHTML = vids.length ? `<h3 style="margin:8px 0 12px">فيديوهاتي</h3><div class="grid">${vids.map(e =>
+    `<div class="card"><iframe class="video" src="https://www.youtube.com/embed/${ytId(e.video)}" allowfullscreen loading="lazy"></iframe><h3 style="margin-top:10px">${esc(e.name)}</h3></div>`).join('')}</div>` : '';
+}
+$('#exForm').onsubmit = ev => {
+  ev.preventDefault();
+  ex.unshift(Object.fromEntries(new FormData(ev.target)));
+  store.set('exercises', ex); ev.target.reset(); renderEx();
+};
+$('#exBody').onclick = ev => { const i = ev.target.dataset.del; if (i !== undefined){ ex.splice(i,1); store.set('exercises', ex); renderEx(); } };
+renderEx();
+
+// ===== البرامج الجاهزة =====
+// [الاسم، العضلة، المعدة، المجموعات، التكرارات]
+const programs = {
+  'شامل': { desc: 'تمرين لكامل الجسم — ٣ أيام بالأسبوع مع يوم راحة بينها.', list: [
+    ['سكوات بالبار','الأرجل','بار حديد',4,8], ['بنش برس','الصدر','بار حديد',4,8], ['تجديف بالبار','الظهر','بار حديد',3,10],
+    ['ضغط أكتاف بالدمبل','الأكتاف','دمبل',3,10], ['رومانيان ديدلفت','الأرجل','بار حديد',3,10], ['سحب أمامي','الظهر','جهاز كيبل',3,12],
+    ['بايسبس كيرل','الذراعين','دمبل',2,12], ['بلانك (ثواني)','البطن','وزن الجسم',3,45] ]},
+  'دفع': { desc: 'Push — الصدر والأكتاف والترايسبس.', list: [
+    ['بنش برس','الصدر','بار حديد',4,8], ['بنش مائل بالدمبل','الصدر','دمبل',3,10], ['ضغط أكتاف','الأكتاف','دمبل',3,10],
+    ['رفرفة جانبية','الأكتاف','دمبل',3,15], ['تفتيح صدر كيبل','الصدر','جهاز كيبل',3,12], ['ترايسبس بوش داون','الذراعين','جهاز كيبل',3,12],
+    ['ترايسبس فوق الرأس','الذراعين','دمبل',3,12] ]},
+  'سحب': { desc: 'Pull — الظهر والبايسبس والكتف الخلفي.', list: [
+    ['ديدلفت','الظهر','بار حديد',3,5], ['عقلة / سحب أمامي','الظهر','وزن الجسم',4,8], ['تجديف بالبار','الظهر','بار حديد',3,10],
+    ['تجديف كيبل جالس','الظهر','جهاز كيبل',3,12], ['فيس بول','الأكتاف','جهاز كيبل',3,15], ['بايسبس كيرل بالبار','الذراعين','بار حديد',3,10],
+    ['هامر كيرل','الذراعين','دمبل',3,12] ]},
+  'أرجل': { desc: 'Legs — الفخذ الأمامي والخلفي والمؤخرة والسمانة.', list: [
+    ['سكوات بالبار','الأرجل','بار حديد',4,8], ['رومانيان ديدلفت','الأرجل','بار حديد',3,10], ['ضغط أرجل','الأرجل','جهاز ضغط أرجل',3,12],
+    ['لانجز بالدمبل','الأرجل','دمبل',3,10], ['رفرفة أمامية (ليق إكستنشن)','الأرجل','جهاز كيبل',3,15], ['ثني خلفي (ليق كيرل)','الأرجل','جهاز كيبل',3,12],
+    ['سمانة واقف','الأرجل','جهاز سميث',4,15] ]},
+};
+let prog = store.get('prog', 'شامل');
+const toEx = ([name,muscle,equip,sets,reps]) => ({ name, muscle, equip, weight:'', sets, reps, video:'' });
+function renderProg(){
+  $('#progChips').innerHTML = Object.keys(programs).map(k => `<button class="chip ${k===prog?'on':''}" data-p="${k}">${k}</button>`).join('');
+  $('#progDesc').textContent = programs[prog].desc;
+  $('#progList').innerHTML = programs[prog].list.map((e,i) => `<div class="prog"><span class="n">${(i+1).toLocaleString('ar')}</span>
+    <div class="info"><b>${e[0]}</b><div class="meta">${e[2]} · ${e[3]} × ${e[4]}</div></div>
+    <a class="ghost" href="${ytSearch('طريقة أداء تمرين '+e[0])}" target="_blank" rel="noopener" style="text-decoration:none;padding:6px 10px">▶</a>
+    <button class="ghost" data-pi="${i}">+ أضف</button></div>`).join('');
+}
+$('#progChips').onclick = ev => { if (ev.target.dataset.p){ prog = ev.target.dataset.p; store.set('prog', prog); renderProg(); } };
+$('#progList').onclick = ev => {
+  const i = ev.target.dataset.pi; if (i === undefined) return;
+  ex.unshift(toEx(programs[prog].list[i])); store.set('exercises', ex); renderEx();
+  ev.target.textContent = '✓'; setTimeout(() => ev.target.textContent = '+ أضف', 900);
+};
+$('#progAll').onclick = () => {
+  ex = programs[prog].list.map(toEx).concat(ex); store.set('exercises', ex); renderEx();
+  $('#progAll').textContent = '✓ أُضيف — عدّل الأوزان من السجل'; setTimeout(() => $('#progAll').textContent = 'أضف البرنامج كاملاً للسجل', 1800);
+};
+renderProg();
+
+// video library (opens YouTube search for each topic)
+const lib = [
+  ['الصدر','بنش برس بالبار','طريقة أداء بنش برس الصحيحة'],
+  ['الظهر','سحب أمامي (لات بول داون)','طريقة أداء تمرين لات بول داون'],
+  ['الأرجل','سكوات بالبار','طريقة أداء السكوات الصحيحة'],
+  ['الأكتاف','ضغط أكتاف بالدمبل','تمرين ضغط الأكتاف بالدمبل'],
+  ['الذراعين','بايسبس كيرل','طريقة أداء تمرين البايسبس'],
+  ['البطن','بلانك','طريقة أداء تمرين البلانك'],
+];
+const vidCard = ([tag,title,q]) => `<div class="card">
+  <a href="${ytSearch(q)}" target="_blank" rel="noopener" style="text-decoration:none">
+    <div class="video" style="display:grid;place-items:center"><svg width="54" height="54" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="var(--accent)"/><path d="M10 8l6 4-6 4z" fill="#fff"/></svg></div></a>
+  <div style="margin-top:10px"><span class="tag">${tag}</span><h3 style="margin-top:6px">${title}</h3></div></div>`;
+$('#vidGrid').innerHTML = lib.map(vidCard).join('');
+$('#nutVids').innerHTML = [
+  ['تغذية','وجبة ما قبل التمرين','وجبة قبل التمرين'],
+  ['تغذية','حساب الماكروز','طريقة حساب الماكروز للتنشيف والتضخيم'],
+  ['تغذية','مصادر البروتين','أفضل مصادر البروتين لبناء العضلات'],
+].map(vidCard).join('');
+
+// nutrition
+$('#calForm').onsubmit = ev => {
+  ev.preventDefault();
+  const f = Object.fromEntries(new FormData(ev.target));
+  const bmr = 10*f.w + 6.25*f.h - 5*f.a + (f.g === 'm' ? 5 : -161);
+  const kcal = Math.round(bmr*1.55 + +f.goal), pro = Math.round(f.w*2), fat = Math.round(kcal*.25/9);
+  const carb = Math.max(0, Math.round((kcal - pro*4 - fat*9)/4));
+  showTarget({kcal, pro, carb, fat}); store.set('target', {kcal, pro, carb, fat}); renderLog();
+};
+function showTarget(t){
+  $('#cKcal').textContent = t.kcal.toLocaleString('ar'); $('#cPro').textContent = t.pro.toLocaleString('ar'); $('#cCarb').textContent = t.carb.toLocaleString('ar');
+}
+if (store.get('target')) showTarget(store.get('target'));
+
+// ===== البحث عن الأطعمة (Open Food Facts) =====
+const OFF = 'https://world.openfoodfacts.org';
+const FIELDS = 'code,product_name,product_name_ar,product_name_en,brands,serving_size,serving_quantity,image_front_small_url,nutriments';
+let results = [];
+const num = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
+function toFood(p){
+  const n = p.nutriments || {};
+  const kcal = n['energy-kcal_100g'] ?? (n['energy_100g'] ? n['energy_100g'] / 4.184 : null);
+  if (kcal == null) return null;
+  return {
+    code: p.code, name: p.product_name_ar || p.product_name || p.product_name_en || 'بدون اسم',
+    brand: (p.brands || '').split(',')[0].trim(), img: p.image_front_small_url || '',
+    serving: num(p.serving_quantity) || 100,
+    per100: { kcal: num(kcal), pro: num(n.proteins_100g), carb: num(n.carbohydrates_100g), fat: num(n.fat_100g) }
+  };
+}
+function status(msg){ const s = $('#foodStatus'); s.style.display = msg ? 'block' : 'none'; s.textContent = msg || ''; }
+$('#foodForm').onsubmit = async ev => {
+  ev.preventDefault();
+  const q = new FormData(ev.target).get('q').trim();
+  $('#foodResults').innerHTML = ''; status('جارٍ البحث…');
+  try {
+    let products;
+    if (/^\d{8,14}$/.test(q)) {
+      const r = await fetch(`${OFF}/api/v2/product/${q}.json?fields=${FIELDS}`).then(r => r.json());
+      products = r.product ? [r.product] : [];
+    } else {
+      const url = `${OFF}/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=24&fields=${FIELDS}`;
+      products = (await fetch(url).then(r => r.json())).products || [];
+    }
+    results = products.map(toFood).filter(Boolean);
+    status(results.length ? '' : 'لا توجد نتائج — جرّب اسماً آخر أو بالإنجليزية');
+    renderResults();
+  } catch(e){ status('تعذّر الاتصال بقاعدة البيانات، تحقق من الإنترنت وحاول مرة أخرى'); }
+};
+const fmt = n => Math.round(n).toLocaleString('ar');
+function renderResults(){
+  $('#foodResults').innerHTML = results.map((f,i) => `<div class="food">
+    ${f.img ? `<img src="${esc(f.img)}" alt="" loading="lazy">` : '<div class="ph"></div>'}
+    <div class="info"><b>${esc(f.name)}</b>
+      <div class="meta">${f.brand ? esc(f.brand)+' · ' : ''}لكل ١٠٠غ: ${fmt(f.per100.kcal)} سعرة · ب ${fmt(f.per100.pro)} · ك ${fmt(f.per100.carb)} · د ${fmt(f.per100.fat)}</div></div>
+    <div class="add"><input type="number" min="1" value="${f.serving}" id="g${i}" aria-label="الكمية بالغرام"><span class="meta">غ</span>
+      <button class="btn" data-add="${i}">إضافة</button></div></div>`).join('');
+}
+$('#foodResults').onclick = ev => {
+  const i = ev.target.dataset.add; if (i === undefined) return;
+  const f = results[i], g = num($('#g'+i).value); if (!g) return;
+  const k = g / 100;
+  log.unshift({ name: f.name, brand: f.brand, g, kcal: f.per100.kcal*k, pro: f.per100.pro*k, carb: f.per100.carb*k, fat: f.per100.fat*k });
+  saveLog(); ev.target.textContent = '✓'; setTimeout(() => ev.target.textContent = 'إضافة', 900);
+};
+
+// ===== ماسح الباركود =====
+let scanner = null;
+const scanMsg = t => $('#scanMsg').textContent = t;
+function makeScanner(){
+  const F = Html5QrcodeSupportedFormats;
+  return new Html5Qrcode('reader', { verbose:false,
+    formatsToSupport: [F.EAN_13, F.EAN_8, F.UPC_A, F.UPC_E, F.CODE_128],
+    experimentalFeatures: { useBarCodeDetectorIfSupported: true } });
+}
+function onCode(code){
+  closeScan();
+  if (navigator.vibrate) navigator.vibrate(80);
+  const inp = $('#foodForm input[name=q]'); inp.value = code.trim();
+  $('#foodForm').requestSubmit();
+}
+async function openScan(){
+  $('#scanModal').classList.add('on');
+  if (typeof Html5Qrcode === 'undefined'){ scanMsg('تعذّر تحميل الماسح — تحقق من الإنترنت'); return; }
+  scanMsg('وجّه الكاميرا نحو باركود المنتج');
+  scanner = scanner || makeScanner();
+  try {
+    await scanner.start({ facingMode: 'environment' },
+      { fps: 10, qrbox: (w,h) => ({ width: Math.min(300, w*0.85), height: Math.min(150, h*0.5) }) },
+      onCode, () => {});
+  } catch(e){
+    scanMsg('لا يمكن تشغيل الكاميرا هنا (تحتاج إذن الكاميرا ورابط https). استخدم خيار التقاط صورة بالأسفل.');
+  }
+}
+async function closeScan(){
+  $('#scanModal').classList.remove('on');
+  try { if (scanner && scanner.isScanning) await scanner.stop(); } catch(e){}
+}
+$('#scanBtn').onclick = openScan;
+$('#scanClose').onclick = closeScan;
+$('#scanModal').onclick = ev => { if (ev.target.id === 'scanModal') closeScan(); };
+$('#scanFile').onchange = async ev => {
+  const file = ev.target.files[0]; ev.target.value = '';
+  if (!file || typeof Html5Qrcode === 'undefined') return;
+  try { if (scanner && scanner.isScanning) await scanner.stop(); } catch(e){}
+  scanner = scanner || makeScanner();
+  scanMsg('جارٍ قراءة الصورة…');
+  try { onCode(await scanner.scanFile(file, false)); }
+  catch(e){ scanMsg('لم يُعثر على باركود في الصورة، حاول مرة أخرى بإضاءة أفضل'); }
+};
+
+// ===== سجل اليوم =====
+const today = () => new Date().toISOString().slice(0,10);
+let log = store.get('log-'+today(), []);
+function saveLog(){ store.set('log-'+today(), log); renderLog(); }
+function renderLog(){
+  $('#logBody').innerHTML = log.length ? log.map((e,i) => `<tr><td><b>${esc(e.name)}</b></td><td>${esc(e.brand)||'—'}</td><td>${fmt(e.g)}غ</td>
+    <td>${fmt(e.kcal)}</td><td>${fmt(e.pro)}</td><td>${fmt(e.carb)}</td><td>${fmt(e.fat)}</td><td><button class="ghost" data-rm="${i}">حذف</button></td></tr>`).join('')
+    : '<tr><td colspan="8" class="empty">لم تسجّل أي طعام اليوم</td></tr>';
+  const t = log.reduce((a,e) => ({kcal:a.kcal+e.kcal, pro:a.pro+e.pro, carb:a.carb+e.carb, fat:a.fat+e.fat}), {kcal:0,pro:0,carb:0,fat:0});
+  const goal = store.get('target', null);
+  [['Kcal','kcal'],['Pro','pro'],['Carb','carb'],['Fat','fat']].forEach(([id,k]) => {
+    $('#t'+id).textContent = fmt(t[k]) + (goal ? ' / ' + fmt(goal[k]) : '');
+    $('#p'+id).style.width = goal && goal[k] ? Math.min(100, t[k]/goal[k]*100) + '%' : '0';
+  });
+}
+$('#logBody').onclick = ev => { const i = ev.target.dataset.rm; if (i !== undefined){ log.splice(i,1); saveLog(); } };
+$('#clearLog').onclick = () => { if (confirm('مسح سجل اليوم؟')) { log = []; saveLog(); } };
+renderLog();
+$('#meals').innerHTML = [
+  ['الإفطار','٤ بيضات، شوفان بالحليب، موزة'],
+  ['الغداء','صدر دجاج ٢٠٠غ، أرز، سلطة خضراء'],
+  ['قبل التمرين','خبز أسمر مع زبدة فول سوداني، تمر'],
+  ['العشاء','سمك أو لحم قليل الدسم، بطاطا حلوة، خضار'],
+].map(([t,items]) => `<div class="card meal"><span class="tag">وجبة</span><h3 style="margin-top:6px">${t}</h3><ul>${items.split('، ').map(i=>`<li>${i}</li>`).join('')}</ul></div>`).join('');
+
+// ===== العمل بدون إنترنت =====
+const net = () => { $('#netPill').hidden = navigator.onLine; };
+addEventListener('online', net); addEventListener('offline', net); net();
+if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').catch(() => {});
+// اطلب من المتصفح عدم حذف البيانات المحفوظة
+if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+
+// ===== نسخة احتياطية =====
+$('#exportBtn').onclick = () => {
+  const data = {}; try { for (let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); data[k] = localStorage.getItem(k); } } catch(e){}
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data)], {type:'application/json'}));
+  a.download = `I42-backup-${today()}.json`; a.click(); URL.revokeObjectURL(a.href);
+};
+$('#importFile').onchange = async ev => {
+  const f = ev.target.files[0]; if (!f) return;
+  try { const data = JSON.parse(await f.text()); Object.entries(data).forEach(([k,v]) => localStorage.setItem(k, v)); location.reload(); }
+  catch(e){ alert('الملف غير صالح'); }
+};
+</script>
+</body>
+</html>
