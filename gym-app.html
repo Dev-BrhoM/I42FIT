@@ -26,14 +26,14 @@
 <style>
 :root{
   --bg:#F5F4EE; --surface:#FFFFFF; --surface2:#EFEDE4; --text:#1F1E1D; --muted:#6B6A63;
-  --line:#E3E0D5; --accent:#D97757; --accent-ink:#FFFFFF; --accent-soft:#F6E3DA;
+  --line:#E3E0D5; --accent:#1675B5; --accent-ink:#FFFFFF; --accent-soft:#DDEFFA;
   --serif:"Source Serif 4","Noto Naskh Arabic", Georgia, serif; --sans:"IBM Plex Sans Arabic", system-ui, sans-serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
   --bg:#262624; --surface:#30302E; --surface2:#3A3A37; --text:#F2F0E8; --muted:#A6A39A;
-  --line:#45443F; --accent:#D97757; --accent-soft:#4A3329; color-scheme:dark; } }
-:root[data-theme="dark"]{ --bg:#262624; --surface:#30302E; --surface2:#3A3A37; --text:#F2F0E8; --muted:#A6A39A; --line:#45443F; --accent-soft:#4A3329; color-scheme:dark; }
+  --line:#45443F; --accent:#1675B5; --accent-soft:#203E50; --accent:#55B5EB; --accent-ink:#132D40; color-scheme:dark; } }
+:root[data-theme="dark"]{ --bg:#262624; --surface:#30302E; --surface2:#3A3A37; --text:#F2F0E8; --muted:#A6A39A; --line:#45443F; --accent-soft:#203E50; --accent:#55B5EB; --accent-ink:#132D40; color-scheme:dark; }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.7;transition:background .25s,color .25s}
 .wrap{max-width:920px;margin:0 auto;padding:calc(24px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(80px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left))}
@@ -88,7 +88,8 @@ a{color:var(--accent)}
 .food .add .btn{padding:8px 12px;min-height:40px}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:99px;padding:8px 16px;font:600 .95rem var(--sans);cursor:pointer;min-height:40px}
-.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+[hidden]{display:none!important}
 .prog{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
 .prog .info{flex:1;min-width:0}
 .prog .n{width:28px;height:28px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:600;font-size:.85rem;flex:none}
@@ -128,9 +129,9 @@ a{color:var(--accent)}
   <header>
     <div class="brand">
       <svg class="logo" viewBox="0 0 512 512" aria-hidden="true">
-        <rect width="512" height="512" rx="112" fill="#D97757"/>
+        <rect width="512" height="512" rx="112" fill="#1675B5"/>
         <g fill="#fff"><rect x="86" y="118" width="34" height="76" rx="10"/><rect x="124" y="98" width="40" height="116" rx="12"/>
-        <rect x="164" y="146" width="184" height="20" rx="10" fill="#FBE3D8"/><rect x="348" y="98" width="40" height="116" rx="12"/><rect x="392" y="118" width="34" height="76" rx="10"/></g>
+        <rect x="164" y="146" width="184" height="20" rx="10" fill="#D7F2FF"/><rect x="348" y="98" width="40" height="116" rx="12"/><rect x="392" y="118" width="34" height="76" rx="10"/></g>
         <text x="256" y="400" text-anchor="middle" font-family="'Times New Roman',Times,serif" font-weight="700" font-size="190" fill="#fff">I42</text>
       </svg>
       <h1 class="word">I42<span>FIT</span></h1>
@@ -210,14 +211,14 @@ a{color:var(--accent)}
     <p class="sub" data-i18n="nutritionSub"></p>
 
     <div class="card">
-      <h3 style="margin-bottom:12px" data-i18n="calc"></h3>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px"><h3 data-i18n="calc"></h3><button class="ghost" type="button" id="editProfile" data-i18n="editProfile" hidden></button></div>
       <form id="calForm">
         <label><span data-i18n="weightKg"></span><input name="w" type="number" min="25" max="350" step="0.1" value="75" required></label>
         <label><span data-i18n="heightCm"></span><input name="h" type="number" min="100" max="250" step="0.1" value="175" required></label>
         <label><span data-i18n="age"></span><input name="a" type="number" min="18" max="100" value="25" required></label>
         <label><span data-i18n="sex"></span><select name="g"><option value="m" data-i18n="male"></option><option value="f" data-i18n="female"></option></select></label>
         <label><span data-i18n="goal"></span><select name="goal"><option value="-400" data-i18n="cut"></option><option value="0" data-i18n="maintain"></option><option value="300" data-i18n="bulk"></option></select></label>
-        <button class="btn" type="submit" data-i18n="calculate"></button>
+        <button class="btn" type="submit" data-i18n="calculate"></button><button class="ghost" type="button" id="cancelProfile" data-i18n="cancelProfile" hidden></button>
       </form>
       <div class="stats">
         <div class="stat"><span class="ico" data-ico="kcal"></span><b id="cKcal">—</b><span data-i18n="kcal"></span></div>
@@ -236,7 +237,7 @@ a{color:var(--accent)}
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M10 8v8M13 8v8M17 8v8"/></svg>
         </button>
       </form>
-      <div id="foodStatus" role="status" aria-live="polite" class="empty" style="display:none"></div>
+      <label style="margin-top:8px"><select id="foodRegion" data-i18n-aria="saFood"><option value="sa" data-i18n="saFood"></option><option value="all" data-i18n="allFood"></option></select></label><div id="foodStatus" role="status" aria-live="polite" class="empty" style="display:none"></div>
       <div id="foodResults"></div>
     </div>
 
@@ -331,7 +332,7 @@ ar: {
   nutritionSub:'احسب احتياجك اليومي واتبع وجبات متوازنة.', calc:'حاسبة السعرات', heightCm:'الطول (سم)', age:'العمر', sex:'الجنس',
   male:'ذكر', female:'أنثى', goal:'الهدف', cut:'خسارة دهون', maintain:'ثبات', bulk:'بناء عضل', calculate:'احسب',
   kcal:'سعرة', proteinG:'بروتين (غ)', carbsG:'كارب (غ)', fatG:'دهون (غ)',
-  foodSearch:'البحث عن الأطعمة', foodSearchSub:'ابحث بالاسم أو الشركة أو رقم الباركود. البيانات من Open Food Facts.',
+  editProfile:'تعديل بياناتي', cancelProfile:'إلغاء', localFood:'قيم مرجعية تقريبية', saFood:'منتجات متداولة في السعودية', allFood:'كل المنتجات', foodSearch:'البحث عن الأطعمة', foodSearchSub:'ابحث بالاسم أو الشركة أو رقم الباركود. الأطعمة الأساسية بقيم تقريبية، والمنتجات من Open Food Facts.',
   foodQ:'اسم الطعام / الشركة / الباركود', foodPh:'مثال: المراعي لبن، nutella، 6281007…', search:'بحث',
   searching:'جارٍ البحث…', noResults:'لا توجد نتائج — جرّب اسماً آخر أو بالإنجليزية', netErr:'تعذّر الاتصال بقاعدة البيانات، تحقق من الإنترنت وحاول مرة أخرى',
   per100:'لكل ١٠٠غ', P:'ب', C:'ك', F:'د', g:'غ', grams:'الكمية بالغرام', noName:'بدون اسم',
@@ -366,7 +367,7 @@ en: {
   nutritionSub:'Work out your daily needs and follow balanced meals.', calc:'Calorie calculator', heightCm:'Height (cm)', age:'Age', sex:'Sex',
   male:'Male', female:'Female', goal:'Goal', cut:'Lose fat', maintain:'Maintain', bulk:'Build muscle', calculate:'Calculate',
   kcal:'kcal', proteinG:'Protein (g)', carbsG:'Carbs (g)', fatG:'Fat (g)',
-  foodSearch:'Food search', foodSearchSub:'Search by name, brand or barcode. Data from Open Food Facts.',
+  editProfile:'Edit my profile', cancelProfile:'Cancel', localFood:'Approximate reference values', saFood:'Products sold in Saudi Arabia', allFood:'All products', foodSearch:'Food search', foodSearchSub:'Search by name, brand or barcode. Generic foods use approximate values; products use Open Food Facts.',
   foodQ:'Food / brand / barcode', foodPh:'e.g. Almarai laban, nutella, 6281007…', search:'Search',
   searching:'Searching…', noResults:'No results — try another name', netErr:'Couldn\'t reach the food database. Check your connection and try again.',
   per100:'per 100g', P:'P', C:'C', F:'F', g:'g', grams:'Amount in grams', noName:'Unnamed',
@@ -563,7 +564,7 @@ $('#libSearch').oninput = renderLib;
 // ===== أيقونات متحركة للماكروز =====
 const ICONS = {
   kcal: `<svg viewBox="0 0 24 24"><path class="flame" d="M12 2c1 3.5 5 5.5 5 10.5A5 5 0 0 1 7 12.5c0-2 1-3.5 2-4.5.2 1.6 1 2.6 2 3 0-3 0-6 1-9z" fill="#E8875F"/><path class="flame2" d="M12 11c.6 1.6 2.5 2.4 2.5 4.6a2.5 2.5 0 0 1-5 0c0-1.3.8-2.2 1.5-2.6 0-.9.4-1.5 1-2z" fill="#F7C873"/></svg>`,
-  pro: `<svg viewBox="0 0 24 24" class="lift"><rect x="2" y="9" width="3" height="6" rx="1" fill="#D97757"/><rect x="5" y="7.5" width="2.5" height="9" rx="1" fill="#D97757"/><rect x="7.5" y="11" width="9" height="2" rx="1" fill="#B8A99A"/><rect x="16.5" y="7.5" width="2.5" height="9" rx="1" fill="#D97757"/><rect x="19" y="9" width="3" height="6" rx="1" fill="#D97757"/></svg>`,
+  pro: `<svg viewBox="0 0 24 24" class="lift"><rect x="2" y="9" width="3" height="6" rx="1" fill="#1675B5"/><rect x="5" y="7.5" width="2.5" height="9" rx="1" fill="#1675B5"/><rect x="7.5" y="11" width="9" height="2" rx="1" fill="#B8A99A"/><rect x="16.5" y="7.5" width="2.5" height="9" rx="1" fill="#1675B5"/><rect x="19" y="9" width="3" height="6" rx="1" fill="#1675B5"/></svg>`,
   carb: `<svg viewBox="0 0 24 24"><g class="sway"><path d="M12 22V6" stroke="#C9A24A" stroke-width="1.6" stroke-linecap="round"/>
     <ellipse class="g1" cx="9.6" cy="8" rx="1.6" ry="2.6" transform="rotate(-30 9.6 8)" fill="#E2B85C"/><ellipse class="g1" cx="14.4" cy="8" rx="1.6" ry="2.6" transform="rotate(30 14.4 8)" fill="#E2B85C"/>
     <ellipse class="g2" cx="9.6" cy="12.5" rx="1.6" ry="2.6" transform="rotate(-30 9.6 12.5)" fill="#D9A646"/><ellipse class="g2" cx="14.4" cy="12.5" rx="1.6" ry="2.6" transform="rotate(30 14.4 12.5)" fill="#D9A646"/>
@@ -603,8 +604,16 @@ $('#calForm').onsubmit = ev => {
   const kcal = Math.round(bmr*1.55 + +f.goal), pro = Math.round(f.w*2), fat = Math.round(kcal*.25/9);
   const carb = Math.max(0, Math.round((kcal - pro*4 - fat*9)/4));
   if (kcal < 1200 || pro*4 + fat*9 > kcal) { alert(lang === 'ar' ? 'الهدف المحسوب غير مناسب لهذه المدخلات. استشر مختصاً.' : 'The calculated target is unsuitable for these inputs. Consult a professional.'); return; }
-  store.set('target', {kcal, pro, carb, fat}); showTarget(); renderLog();
+  store.set('target', {kcal, pro, carb, fat}); store.set('profile', f); setProfileEditing(false); showTarget(); renderLog();
 };
+function setProfileEditing(editing){
+ const p=store.get('profile',null), form=$('#calForm');
+ if(p) for(const k of ['w','h','a','g','goal']) if(form.elements[k]) form.elements[k].value=p[k];
+ form.hidden=!!p&&!editing; $('#editProfile').hidden=!p||editing; $('#cancelProfile').hidden=!p||!editing;
+}
+$('#editProfile').onclick=()=>setProfileEditing(true);
+$('#cancelProfile').onclick=()=>setProfileEditing(false);
+setProfileEditing(false);
 function showTarget(){
   const tg = store.get('target'); if (!tg) return;
   $('#cKcal').textContent = fmt(tg.kcal); $('#cPro').textContent = fmt(tg.pro); $('#cCarb').textContent = fmt(tg.carb);
@@ -612,6 +621,26 @@ function showTarget(){
 
 // ===== البحث عن الأطعمة (Open Food Facts) =====
 const OFF = 'https://world.openfoodfacts.org';
+// Approximate generic nutrition per 100 g, not branded label values.
+const stapleRows=[
+['بيض مسلوق','Boiled egg','بيض بيضه بيضة egg eggs',155,12.6,1.1,10.6,50],
+['بيض نيء','Raw whole egg','بيض بيضة egg eggs',143,12.6,0.7,9.5,50],
+['بياض البيض','Egg white','بيض بياض egg whites',52,10.9,0.7,0.2,33],
+['توست أبيض','White bread','توست خبز ابيض شريحة toast bread',266,8.9,49.4,3.3,28],
+['توست قمح كامل','Whole wheat bread','توست اسمر بر خبز toast whole wheat bread',247,12.5,41.2,3.4,28],
+['أرز أبيض مطبوخ','Cooked white rice','رز ارز rice',130,2.7,28.2,0.3,150],
+['صدر دجاج مطبوخ','Cooked chicken breast','دجاج صدور chicken',165,31,0,3.6,150],
+['موز','Banana','موز banana',89,1.1,22.8,0.3,118],
+['تفاح','Apple','تفاح apple',52,0.3,13.8,0.2,182],
+['شوفان جاف','Dry oats','شوفان oats oatmeal',389,16.9,66.3,6.9,40],
+['تمر','Dates','تمر تمور dates date',282,2.5,75,0.4,24],
+['حليب كامل الدسم','Whole milk','حليب milk',61,3.2,4.8,3.3,100],
+['بطاطس مسلوقة','Boiled potato','بطاطس بطاطا potato',87,1.9,20.1,0.1,150],
+['تونة بالماء مصفاة','Tuna in water drained','تونة تونه tuna',116,25.5,0,0.8,100],
+['عدس مطبوخ','Cooked lentils','عدس lentils',116,9,20.1,0.4,100]];
+const normalizeFood=q=>String(q).toLowerCase().normalize('NFKD').replace(/[\u064B-\u065F\u0670]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').trim();
+function localFoods(q){const words=normalizeFood(q).split(/\s+/).filter(Boolean);if(!words.length)return [];return stapleRows.filter(r=>words.every(w=>normalizeFood(r.slice(0,3).join(' ')).split(/\s+/).some(token=>token===w||token==='ال'+w))).map(r=>({names:{ar:r[0],en:r[1]},brand:'',img:'',serving:r[7],source:'localFood',per100:{kcal:r[3],pro:r[4],carb:r[5],fat:r[6]}}));}
+const brandAliases={'المراعي':'Almarai','نادك':'Nadec','الصافي':'Al Safi','لوزين':'Lusine','هرفي':'Herfy','نادك حليب':'Nadec milk','المراعي حليب':'Almarai milk'};
 const FIELDS = 'code,product_name,product_name_ar,product_name_en,brands,serving_size,serving_quantity,image_front_small_url,nutriments';
 let results = [], lastStatus = '', searchSequence = 0;
 const foodJSON = async (url, allowMissing=false) => { const response = await fetch(url); if(allowMissing && response.status===404) return {}; if (!response.ok) throw Error('HTTP '+response.status); return response.json(); };
@@ -625,7 +654,7 @@ function toFood(p){
   if (kcal===null || [pro,carb,fat].some(v=>v===null)) return null;
   return {
     code: p.code, names: { ar: p.product_name_ar || p.product_name || p.product_name_en, en: p.product_name_en || p.product_name || p.product_name_ar },
-    brand: (p.brands || '').split(',')[0].trim(), img: p.image_front_small_url || '',
+    brand: (p.brands || '').split(',')[0].trim(), img: p.image_front_small_url || '', source:'Open Food Facts',
     serving: num(p.serving_quantity) || 100,
     per100: { kcal, pro, carb, fat }
   };
@@ -635,27 +664,28 @@ function status(key){ lastStatus = key || ''; const s = $('#foodStatus'); s.styl
 $('#foodForm').onsubmit = async ev => {
   ev.preventDefault();
   const q = new FormData(ev.target).get('q').trim();
-  const sequence = ++searchSequence; results = []; $('#foodResults').innerHTML = ''; status('searching');
+  const sequence = ++searchSequence; const local = localFoods(q); results = local; renderResults(); status('searching');
   try {
     let products;
     if (/^\d{8,14}$/.test(q)) {
       const r = await foodJSON(`${OFF}/api/v2/product/${q}.json?fields=${FIELDS}`, true);
       products = r.product ? [r.product] : [];
     } else {
-      const url = `${OFF}/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=24&fields=${FIELDS}`;
+      const term=Object.prototype.hasOwnProperty.call(brandAliases,q)?brandAliases[q]:q;
+      const url = `${OFF}/cgi/search.pl?search_terms=${encodeURIComponent(term)}&search_simple=1&action=process&json=1&page_size=24&fields=${FIELDS}` + ($('#foodRegion').value==='sa'?'&tagtype_0=countries&tag_contains_0=contains&tag_0=saudi-arabia':'');
       products = (await foodJSON(url)).products || [];
     }
     if(sequence !== searchSequence) return;
-    results = products.map(toFood).filter(Boolean);
+    results = local.concat(products.map(toFood).filter(Boolean));
     status(results.length ? '' : 'noResults');
     renderResults();
-  } catch(e){ if(sequence === searchSequence) status('netErr'); }
+  } catch(e){ if(sequence === searchSequence) {status('netErr'); renderResults();} }
 };
 function renderResults(){
   $('#foodResults').innerHTML = results.map((f,i) => `<div class="food">
     ${f.img ? `<img src="${esc(f.img)}" alt="" loading="lazy">` : '<div class="ph"></div>'}
     <div class="info"><b>${esc(foodName(f))}</b>
-      <div class="meta">${f.brand ? esc(f.brand)+' · ' : ''}${t('per100')}: ${fmt(f.per100.kcal)} ${t('kcal')} · ${t('P')} ${fmt(f.per100.pro)} · ${t('C')} ${fmt(f.per100.carb)} · ${t('F')} ${fmt(f.per100.fat)}</div></div>
+      <div class="meta">${f.brand ? esc(f.brand)+' · ' : ''}${esc(f.source==='localFood'?t('localFood'):'Open Food Facts')} · ${t('per100')}: ${fmt(f.per100.kcal)} ${t('kcal')} · ${t('P')} ${fmt(f.per100.pro)} · ${t('C')} ${fmt(f.per100.carb)} · ${t('F')} ${fmt(f.per100.fat)}</div></div>
     <div class="add"><input type="number" min="1" value="${f.serving}" id="g${i}" aria-label="${t('grams')}"><span class="meta">${t('g')}</span>
       <button class="btn" data-add="${i}">${t('add')}</button></div></div>`).join('');
 }
@@ -740,12 +770,13 @@ if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.ser
 if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
 
 // ===== نسخة احتياطية =====
-const backupKey = k => ['lang','theme','prog','exercises','target'].includes(k) || /^log-\d{4}-\d{2}-\d{2}$/.test(k);
+const backupKey = k => ['lang','theme','prog','exercises','target','profile'].includes(k) || /^log-\d{4}-\d{2}-\d{2}$/.test(k);
 const finiteNonnegative = v => typeof v === 'number' && Number.isFinite(v) && v >= 0;
 function validBackupValue(k,v){
   if(k==='lang') return ['ar','en'].includes(v);
   if(k==='theme') return v===null || ['light','dark'].includes(v);
   if(k==='prog') return typeof v==='string' && (Object.prototype.hasOwnProperty.call(programs,v) || Object.prototype.hasOwnProperty.call(OLD_PROG,v));
+  if(k==='profile') return v && ['w','h','a'].every(x=>['string','number'].includes(typeof v[x]) && String(v[x]).trim()!=='' && Number.isFinite(+v[x])) && +v.w>=25 && +v.w<=350 && +v.h>=100 && +v.h<=250 && +v.a>=18 && +v.a<=100 && ['m','f'].includes(v.g) && ['-400','0','300'].includes(String(v.goal));
   if(k==='target') return v && ['kcal','pro','carb','fat'].every(x=>finiteNonnegative(v[x]));
   if(k==='exercises') return Array.isArray(v) && v.every(e=>e && typeof e.name==='string' && typeof e.muscle==='string' && typeof e.equip==='string' && (e.video===undefined || typeof e.video==='string') && (e.key===undefined || typeof e.key==='string') && (e.ar===undefined || typeof e.ar==='string') && (e.en===undefined || typeof e.en==='string') && [e.sets,e.reps].every(x=>['number','string'].includes(typeof x)&&Number.isInteger(+x)&&+x>0) && ['string','number'].includes(typeof e.weight) && Number.isFinite(+e.weight)&&+e.weight>=0);
   return Array.isArray(v) && v.every(e=>e && typeof e.name==='string' && typeof e.brand==='string' && ['g','kcal','pro','carb','fat'].every(x=>finiteNonnegative(e[x])) && e.g>0);
