@@ -1,5 +1,5 @@
 // I42 — يخزّن التطبيق ليعمل بدون إنترنت
-const VERSION = 'i42-v2';
+const VERSION = 'i42-v3';
 const SHELL = ['gym-app.html', 'manifest.json', 'icon.png'];
 const EXTRA = ['https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js'];
 

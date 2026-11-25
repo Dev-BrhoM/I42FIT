@@ -249,6 +249,19 @@ a{color:var(--accent)}
   </div>
 </div>
 
+<div class="modal" id="playerModal" role="dialog" aria-label="شرح التمرين">
+  <div class="sheet" style="max-width:720px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px">
+      <h3>شرح التمرين</h3>
+      <div style="display:flex;gap:6px">
+        <a class="ghost" id="playerOpen" target="_blank" rel="noopener" style="text-decoration:none;display:grid;place-items:center">يوتيوب</a>
+        <button class="ghost" id="playerClose">إغلاق</button>
+      </div>
+    </div>
+    <iframe id="playerFrame" class="video" src="about:blank" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+  </div>
+</div>
+
 <div class="modal" id="scanModal" role="dialog" aria-label="ماسح الباركود">
   <div class="sheet">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
@@ -292,7 +305,7 @@ function renderEx(){
   $('#exBody').innerHTML = ex.length ? ex.map((e,i) => `<tr>
     <td><b>${esc(e.name)}</b></td><td><span class="tag">${esc(e.muscle)}</span></td><td>${esc(e.equip)}</td>
     <td>${e.weight ? esc(e.weight)+' كجم' : '—'}</td><td>${esc(e.sets)} × ${esc(e.reps)}</td>
-    <td><a href="${ytId(e.video) ? 'https://youtu.be/'+ytId(e.video) : vidFor(e.name)}" target="_blank" rel="noopener">▶</a></td>
+    <td><a data-vid="${ytId(e.video) || vidId(e.name)}" href="${ytId(e.video) ? 'https://youtu.be/'+ytId(e.video) : vidFor(e.name)}" target="_blank" rel="noopener">▶</a></td>
     <td><button class="ghost" data-del="${i}">حذف</button></td></tr>`).join('')
     : '<tr><td colspan="7" class="empty">لا توجد تمارين بعد — أضف أول تمرين من الأعلى</td></tr>';
   $('#sCount').textContent = ex.length;
@@ -336,7 +349,7 @@ function renderProg(){
   $('#progDesc').textContent = programs[prog].desc;
   $('#progList').innerHTML = programs[prog].list.map((e,i) => `<div class="prog"><span class="n">${(i+1).toLocaleString('ar')}</span>
     <div class="info"><b>${e[0]}</b><div class="meta">${e[2]} · ${e[3]} × ${e[4]}</div></div>
-    <a class="ghost" href="${vidFor(e[0])}" target="_blank" rel="noopener" style="text-decoration:none;padding:6px 10px">▶</a>
+    <a class="ghost" data-vid="${vidId(e[0])}" href="${vidFor(e[0])}" target="_blank" rel="noopener" style="text-decoration:none;padding:6px 10px">▶</a>
     <button class="ghost" data-pi="${i}">+ أضف</button></div>`).join('');
 }
 $('#progChips').onclick = ev => { if (ev.target.dataset.p){ prog = ev.target.dataset.p; store.set('prog', prog); renderProg(); } };
@@ -365,6 +378,24 @@ const EN = Object.fromEntries(Object.values(libGroups).flat());
 Object.assign(EN, { 'بنش برس بالبار':'bench press', 'سكوات بالبار':'squat', 'ضغط أكتاف بالدمبل':'overhead press', 'سحب أمامي (لات بول داون)':'lat pulldown',
   'بنش مائل بالدمبل':'incline press', 'عقلة / سحب أمامي':'pull up', 'بايسبس كيرل بالبار':'bicep curl', 'لانجز بالدمبل':'lunge',
   'رفرفة أمامية (ليق إكستنشن)':'leg extension', 'ثني خلفي (ليق كيرل)':'leg curl', 'سمانة واقف':'calf raise', 'بلانك (ثواني)':'plank' });
+// فيديو الشرح المباشر لكل تمرين من قناة Jeff Nippard
+const VID = {"bench press":"hWbUlkb5Ms4","incline press":"xGMqmmn5Z7Q","dumbbell press":"B_2meD6SSNA","cable fly":"qg3B1Uu6dto","dips":"yN6Q1UI_xkE","push up":"7RFG9k99AOU","pec deck":"3TN4otAxzZk","deadlift":"ZaTM37cfiDs","pull up":"Hdc7Mw6BIEE","lat pulldown":"hnSqbBk15tw","barbell row":"axoeDmW0oAY","seated cable row":"PAXkl-AdJFg","dumbbell row":"djKXLt7kv7Q","t-bar row":"1mGXae-LCiM","pullover":"jLvqKgW-_G8","squat":"PPmvh7gBTi0","romanian deadlift":"_oyxCn2iSjU","leg press":"nDh_BlnLCGc","hack squat":"FmNpOsEWms4","bulgarian split squat":"A9OxBT-6Mw0","lunge":"rGpIVqAQc-Y","leg extension":"ztNBgrGy6FQ","leg curl":"Lh3iMIcbkBQ","hip thrust":"xDmFkJxPzeM","calf raise":"baEXLy09Ncc","overhead press":"_RlRDWO2jfg","lateral raise":"f_OGBg2KxgY","face pull":"zEuseRjS7vg","rear delt fly":"zEuseRjS7vg","shrug":"r74q9EF_ni4","bicep curl":"_GziHDdJY10","hammer curl":"_GziHDdJY10","preacher curl":"_GziHDdJY10","tricep pushdown":"5YaWrGPtIIE","overhead tricep extension":"5YaWrGPtIIE","skull crusher":"5YaWrGPtIIE","cable crunch":"2RrGnjxSsiA","hanging leg raise":"eLCBC6fjtQU","ab wheel":"1G0y8D5rFDc"};
+const vidId = name => VID[EN[name]] || VID[String(name).toLowerCase().trim()] || '';
+
+// مشغّل الفيديو داخل التطبيق
+document.addEventListener('click', ev => {
+  const a = ev.target.closest('a[data-vid]');
+  if (!a || !a.dataset.vid) return;        // بدون فيديو محدد → يفتح البحث في القناة
+  ev.preventDefault();
+  if (!navigator.onLine){ alert('تشغيل الفيديو يحتاج اتصال بالإنترنت'); return; }
+  $('#playerFrame').src = `https://www.youtube-nocookie.com/embed/${a.dataset.vid}?autoplay=1&playsinline=1&rel=0`;
+  $('#playerOpen').href = 'https://youtu.be/' + a.dataset.vid;
+  $('#playerModal').classList.add('on');
+});
+function closePlayer(){ $('#playerModal').classList.remove('on'); $('#playerFrame').src = 'about:blank'; }
+$('#playerClose').onclick = closePlayer;
+$('#playerModal').onclick = ev => { if (ev.target.id === 'playerModal') closePlayer(); };
+
 function vidFor(name){
   if (EN[name]) return jeff(EN[name]);
   if (/[a-z]/i.test(name)) return jeff(name);            // اسم مكتوب بالإنجليزي
@@ -377,7 +408,7 @@ function renderLib(){
   const rows = Object.entries(libGroups).filter(([g]) => libTab === 'الكل' || g === libTab)
     .flatMap(([g, list]) => list.map(([ar, en]) => ({g, ar, en})))
     .filter(e => !q || e.ar.includes(q) || e.en.includes(q));
-  $('#libList').innerHTML = rows.length ? rows.map(e => `<a class="prog" href="${jeff(e.en)}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+  $('#libList').innerHTML = rows.length ? rows.map(e => `<a class="prog" data-vid="${VID[e.en]||''}" href="${jeff(e.en)}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
       <span class="n">▶</span><div class="info"><b>${e.ar}</b><div class="meta">${e.en} · ${e.g}</div></div></a>`).join('')
     : '<p class="empty">لا يوجد تمرين بهذا الاسم</p>';
 }
