@@ -91,6 +91,12 @@ a{color:var(--accent)}
 .modal.on{display:flex}
 .sheet{background:var(--surface);width:100%;max-width:480px;border-radius:18px 18px 0 0;max-height:calc(100% - env(safe-area-inset-top));overflow:auto;overscroll-behavior:contain;padding:18px max(16px,env(safe-area-inset-right)) calc(18px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
 @media (min-width:600px){ .modal{align-items:center} .sheet{border-radius:18px} }
+#videoPreview{width:min(720px,calc(100% - 24px));max-width:none;max-height:calc(100% - 24px);padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--text)}
+#videoPreview::backdrop{background:rgb(0 0 0 / 62%)}
+.preview-header,.preview-actions{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.preview-actions{justify-content:flex-end;margin-top:10px}
+.preview-actions a{display:grid;place-items:center;text-decoration:none}
+#previewFrame{display:block;width:100%;aspect-ratio:16/9;min-height:200px;border:0;border-radius:9px;margin-top:12px;background:#000}
 #reader{width:100%;border-radius:12px;overflow:hidden;background:#000;min-height:200px}
 #reader video{width:100%!important;display:block}
 .meta{color:var(--muted);font-size:.85rem}
@@ -233,6 +239,17 @@ a{color:var(--accent)}
   </div>
 </div>
 
+<dialog id="videoPreview" aria-labelledby="previewTitle">
+  <div class="preview-header">
+    <h3 id="previewTitle" data-i18n="videoPreview">معاينة الفيديو</h3>
+    <form method="dialog"><button class="ghost" data-i18n="close">إغلاق</button></form>
+  </div>
+  <iframe id="previewFrame" title="YouTube" referrerpolicy="strict-origin-when-cross-origin" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>
+  <div class="preview-actions">
+    <a class="ghost" id="previewExternal" target="_blank" rel="noopener" data-i18n="watchVideo">شاهد على YouTube</a>
+  </div>
+</dialog>
+
 <div class="modal" id="scanModal" role="dialog" aria-modal="true" aria-labelledby="scanTitleHeading">
   <div class="sheet">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
@@ -287,7 +304,7 @@ ar: {
   noEx:'لا توجد تمارين بعد — أضف أول تمرين من الأعلى', myVideos:'فيديوهاتي',
   library:'مكتبة التمارين', librarySub:'اضغط على أي تمرين لمشاهدة شرحه من قناة Jeff Nippard.', searchEx:'ابحث عن تمرين…',
   all:'الكل', noMatch:'لا يوجد تمرين بهذا الاسم', allVideos:'كل فيديوهات القناة',
-  howTo:'شرح التمرين', watchVideo:'شاهد على YouTube', close:'إغلاق',
+  howTo:'شرح التمرين', videoPreview:'معاينة الفيديو', watchVideo:'شاهد على YouTube', close:'إغلاق',
   nutritionSub:'احسب احتياجك اليومي واتبع وجبات متوازنة.', calc:'حاسبة السعرات', heightCm:'الطول (سم)', age:'العمر', sex:'الجنس',
   male:'ذكر', female:'أنثى', goal:'الهدف', cut:'خسارة دهون', maintain:'ثبات', bulk:'بناء عضل', calculate:'احسب',
   kcal:'سعرة', proteinG:'بروتين (غ)', carbsG:'كارب (غ)', fatG:'دهون (غ)',
@@ -322,7 +339,7 @@ en: {
   noEx:'No exercises yet — add your first one above', myVideos:'My videos',
   library:'Exercise library', librarySub:'Tap any exercise to watch the explanation from Jeff Nippard\'s channel.', searchEx:'Search exercises…',
   all:'All', noMatch:'No exercise matches that name', allVideos:'All channel videos',
-  howTo:'How to do it', watchVideo:'Watch on YouTube', close:'Close',
+  howTo:'How to do it', videoPreview:'Video preview', watchVideo:'Watch on YouTube', close:'Close',
   nutritionSub:'Work out your daily needs and follow balanced meals.', calc:'Calorie calculator', heightCm:'Height (cm)', age:'Age', sex:'Sex',
   male:'Male', female:'Female', goal:'Goal', cut:'Lose fat', maintain:'Maintain', bulk:'Build muscle', calculate:'Calculate',
   kcal:'kcal', proteinG:'Protein (g)', carbsG:'Carbs (g)', fatG:'Fat (g)',
@@ -435,7 +452,7 @@ const progDesc = { full:'fullDesc', push:'pushDesc', pull:'pullDesc', legsDay:'l
 const progName = e => lang === 'ar' ? e[0] : (e[6] || title(e[1]));
 
 // فيديو الشرح المباشر لكل تمرين من قناة Jeff Nippard
-const VID = {"bench press":"hWbUlkb5Ms4","incline press":"xGMqmmn5Z7Q","dumbbell press":"B_2meD6SSNA","cable fly":"qg3B1Uu6dto","dips":"yN6Q1UI_xkE","push up":"7RFG9k99AOU","pec deck":"3TN4otAxzZk","deadlift":"ZaTM37cfiDs","pull up":"Hdc7Mw6BIEE","lat pulldown":"hnSqbBk15tw","barbell row":"axoeDmW0oAY","seated cable row":"PAXkl-AdJFg","dumbbell row":"djKXLt7kv7Q","t-bar row":"1mGXae-LCiM","pullover":"jLvqKgW-_G8","squat":"PPmvh7gBTi0","romanian deadlift":"_oyxCn2iSjU","leg press":"nDh_BlnLCGc","hack squat":"FmNpOsEWms4","bulgarian split squat":"A9OxBT-6Mw0","lunge":"rGpIVqAQc-Y","leg extension":"ztNBgrGy6FQ","leg curl":"Lh3iMIcbkBQ","hip thrust":"xDmFkJxPzeM","calf raise":"baEXLy09Ncc","overhead press":"_RlRDWO2jfg","lateral raise":"f_OGBg2KxgY","face pull":"zEuseRjS7vg","rear delt fly":"zEuseRjS7vg","shrug":"r74q9EF_ni4","bicep curl":"_GziHDdJY10","hammer curl":"_GziHDdJY10","preacher curl":"_GziHDdJY10","tricep pushdown":"5YaWrGPtIIE","overhead tricep extension":"5YaWrGPtIIE","skull crusher":"5YaWrGPtIIE","cable crunch":"2RrGnjxSsiA","hanging leg raise":"eLCBC6fjtQU","ab wheel":"1G0y8D5rFDc"};
+const VID = {"bench press":"hWbUlkb5Ms4","incline press":"xGMqmmn5Z7Q","dumbbell press":"B_2meD6SSNA","cable fly":"qg3B1Uu6dto","dips":"yN6Q1UI_xkE","push up":"7RFG9k99AOU","pec deck":"3TN4otAxzZk","deadlift":"ZaTM37cfiDs","pull up":"Hdc7Mw6BIEE","lat pulldown":"hnSqbBk15tw","barbell row":"axoeDmW0oAY","seated cable row":"PAXkl-AdJFg","dumbbell row":"djKXLt7kv7Q","t-bar row":"1mGXae-LCiM","pullover":"jLvqKgW-_G8","squat":"PPmvh7gBTi0","romanian deadlift":"_oyxCn2iSjU","leg press":"nDh_BlnLCGc","hack squat":"FmNpOsEWms4","bulgarian split squat":"A9OxBT-6Mw0","lunge":"rGpIVqAQc-Y","leg extension":"ztNBgrGy6FQ","leg curl":"Lh3iMIcbkBQ","hip thrust":"xDmFkJxPzeM","calf raise":"baEXLy09Ncc","overhead press":"_RlRDWO2jfg","lateral raise":"f_OGBg2KxgY","face pull":"zEuseRjS7vg","rear delt fly":"zEuseRjS7vg","shrug":"r74q9EF_ni4","bicep curl":"_GziHDdJY10","hammer curl":"_GziHDdJY10","preacher curl":"_GziHDdJY10","tricep pushdown":"5YaWrGPtIIE","overhead tricep extension":"5YaWrGPtIIE","skull crusher":"5YaWrGPtIIE","cable crunch":"2RrGnjxSsiA","hanging leg raise":"eLCBC6fjtQU","ab wheel":"1G0y8D5rFDc","plank":"1G0y8D5rFDc"};
 // الاسم (عربي أو إنجليزي) → مفتاح الفيديو
 const KEY = {};
 Object.values(libGroups).flat().forEach(([ar,en]) => { KEY[ar] = en; KEY[en] = en; });
@@ -452,6 +469,27 @@ function vidFor(name, key, savedURL) {
   return ytSearch((lang === 'ar' ? 'طريقة أداء تمرين ' : 'how to ') + name);
 }
 
+const preview = $('#videoPreview');
+const previewFrame = $('#previewFrame');
+document.addEventListener('click', event => {
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const link = event.target.closest('a[data-video-preview]');
+  const id = link && ytId(link.href);
+  if (!id) return;
+  const nativePreview = window.webkit?.messageHandlers?.i42VideoPreview;
+  if (nativePreview) {
+    event.preventDefault();
+    nativePreview.postMessage({id, lang});
+    return;
+  }
+  if (typeof preview.showModal !== 'function') return;
+  event.preventDefault();
+  $('#previewExternal').href = ytWatch(id);
+  previewFrame.src = 'https://www.youtube.com/embed/' + id + '?playsinline=1&rel=0';
+  if (!preview.open) preview.showModal();
+});
+preview.addEventListener('close', () => previewFrame.removeAttribute('src'));
+
 // ===== سجل التمارين =====
 let ex = store.get('exercises', []);
 function renderEx(){
@@ -460,7 +498,7 @@ function renderEx(){
     const name = e.ar && e.en ? (lang === 'ar' ? e.ar : e.en) : e.name;
     return `<tr><td><b>${esc(name)}</b></td><td><span class="tag">${esc(tv(e.muscle))}</span></td><td>${esc(tv(e.equip))}</td>
     <td>${e.weight ? esc(e.weight)+' '+t('kg') : '—'}</td><td>${esc(e.sets)} × ${esc(e.reps)}</td>
-    <td><a href="${href}" target="_blank" rel="noopener" aria-label="${t('howTo')}">▶</a></td>
+    <td><a data-video-preview href="${href}" target="_blank" rel="noopener" aria-label="${t('howTo')}">▶</a></td>
     <td><button class="ghost" data-del="${i}">${t('del')}</button></td></tr>`; }).join('')
     : `<tr><td colspan="7" class="empty">${t('noEx')}</td></tr>`;
   $('#sCount').textContent = ex.length.toLocaleString(loc());
@@ -468,7 +506,7 @@ function renderEx(){
   $('#sVol').textContent = ex.reduce((a,e) => a + (+e.weight||0) * e.sets * e.reps, 0).toLocaleString(loc());
   const vids = ex.filter(e => ytId(e.video));
   $('#myVideos').innerHTML = vids.length ? `<h3 style="margin:8px 0 12px">${t('myVideos')}</h3><div class="grid">${vids.map(e =>
-    `<div class="card"><h3 style="margin-bottom:8px">${esc(e.name)}</h3><a class="btn" href="${ytWatch(ytId(e.video))}" target="_blank" rel="noopener">${t('watchVideo')}</a></div>`).join('')}</div>` : '';
+    `<div class="card"><h3 style="margin-bottom:8px">${esc(e.name)}</h3><a class="btn" data-video-preview href="${ytWatch(ytId(e.video))}" target="_blank" rel="noopener">${t('videoPreview')}</a></div>`).join('')}</div>` : '';
 }
 $('#exForm').onsubmit = ev => {
   ev.preventDefault();
@@ -489,7 +527,7 @@ function renderProg(){
   $('#progDesc').textContent = t(progDesc[prog]);
   $('#progList').innerHTML = programs[prog].map((e,i) => `<div class="prog"><span class="n">${(i+1).toLocaleString(loc())}</span>
     <div class="info"><b>${progName(e)}</b><div class="meta">${t(e[3])} · ${e[4]} × ${e[5]}</div></div>
-    <a class="ghost" href="${vidFor(e[0], e[1])}" aria-label="${t('howTo')}" target="_blank" rel="noopener" style="text-decoration:none;padding:6px 10px">▶</a>
+    <a class="ghost" data-video-preview href="${vidFor(e[0], e[1])}" aria-label="${t('howTo')}" target="_blank" rel="noopener" style="text-decoration:none;padding:6px 10px">▶</a>
     <button class="ghost" data-pi="${i}">${t('addOne')}</button></div>`).join('');
 }
 $('#progChips').onclick = ev => { if (ev.target.dataset.p){ prog = ev.target.dataset.p; store.set('prog', prog); renderProg(); } };
@@ -511,7 +549,7 @@ function renderLib(){
   const rows = Object.entries(libGroups).filter(([g]) => libTab === 'all' || g === libTab)
     .flatMap(([g, list]) => list.map(([ar, en]) => ({g, ar, en})))
     .filter(e => !q || e.ar.includes(q) || e.en.includes(q));
-  $('#libList').innerHTML = rows.length ? rows.map(e => `<a class="prog" href="${vidFor(e.ar, e.en)}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+  $('#libList').innerHTML = rows.length ? rows.map(e => `<a class="prog" data-video-preview href="${vidFor(e.ar, e.en)}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
       <span class="n">▶</span><div class="info"><b>${exName(e.ar, e.en)}</b><div class="meta">${lang === 'ar' ? e.en + ' · ' : ''}${t(e.g)}</div></div></a>`).join('')
     : `<p class="empty">${t('noMatch')}</p>`;
 }
@@ -533,9 +571,9 @@ document.querySelectorAll('[data-ico]').forEach(el => el.innerHTML = ICONS[el.da
 
 // ===== فيديوهات التغذية والوجبات =====
 const nutVids = [
-  [['وجبة ما قبل التمرين','وجبة قبل التمرين'], ['Pre-workout meal','pre workout meal']],
-  [['حساب الماكروز','طريقة حساب الماكروز للتنشيف والتضخيم'], ['Counting macros','how to calculate macros cut bulk']],
-  [['مصادر البروتين','أفضل مصادر البروتين لبناء العضلات'], ['Protein sources','best protein sources for muscle']],
+  ['وجبة ما قبل التمرين', 'Pre-workout meal', 'An0yx-10fes'],
+  ['حساب الماكروز', 'Counting macros', 'M4K0s792wAU'],
+  ['مصادر البروتين', 'Protein sources', 'Pok0Jg2JAkE'],
 ];
 const meals = [
   [['الإفطار','٤ بيضات، شوفان بالحليب، موزة'], ['Breakfast','4 eggs, oats with milk, banana']],
@@ -545,8 +583,8 @@ const meals = [
 ];
 function renderNutStatic(){
   const L = lang === 'ar' ? 0 : 1;
-  $('#nutVids').innerHTML = nutVids.map(v => { const [title, q] = v[L]; return `<div class="card">
-    <a href="${ytSearch(q)}" target="_blank" rel="noopener" style="text-decoration:none">
+  $('#nutVids').innerHTML = nutVids.map(v => { const title = v[L]; return `<div class="card">
+    <a data-video-preview href="${ytWatch(v[2])}" target="_blank" rel="noopener" style="text-decoration:none">
       <div class="video" style="display:grid;place-items:center"><svg width="54" height="54" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="var(--accent)"/><path d="M10 8l6 4-6 4z" fill="#fff"/></svg></div></a>
     <div style="margin-top:10px"><span class="tag">${t('tagNut')}</span><h3 style="margin-top:6px">${title}</h3></div></div>`; }).join('');
   $('#meals').innerHTML = meals.map(m => { const [title, items] = m[L]; return `<div class="card meal"><span class="tag">${t('meal')}</span><h3 style="margin-top:6px">${title}</h3><ul>${items.split(/،\s|,\s/).map(i=>`<li>${i}</li>`).join('')}</ul></div>`; }).join('');
