@@ -13,8 +13,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Noto+Naskh+Arabic:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="navigation.css">
-  <link rel="stylesheet" href="activity.css">
-  <script src="activity.js" defer></script>
+  <link rel="stylesheet" href="activity.css?v=18">
+  <script src="activity.js?v=18" defer></script>
 </head>
 <body data-page="activity">
   <main class="wrap">
@@ -37,17 +37,17 @@
       <symbol id="activity-icon-note" viewBox="0 0 24 24"><path d="M5 4h14v11l-5 5H5V4Zm9 16v-5h5M8 8h8M8 11h5"/></symbol>
       <symbol id="activity-icon-gps" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/></symbol>
     </svg>
-    <h2 class="activity-heading"><svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-session"></use></svg><span data-label="activity">النشاط</span></h2>
+    <h2 class="activity-heading"><svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-session"></use></svg><span data-label="activity">النشاط</span></h2>
     <p class="activity-intro" data-label="activityIntro">سجّل تمرينك وتابع الخطوات والمدة والمسافة. فعّل GPS لرسم المسار على الخريطة.</p>
 
     <div class="layout">
       <section class="card controls" aria-labelledby="session-title">
         <div class="section-header">
-          <h3 id="session-title" class="activity-heading" tabindex="-1"><svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-session"></use></svg><span id="session-label" data-label="session">جلسة النشاط</span></h3>
+          <h3 id="session-title" class="activity-heading" tabindex="-1"><svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-session"></use></svg><span id="session-label" data-label="session">جلسة النشاط</span></h3>
           <button id="watch-shortcut" class="quiet" type="button" data-label="watch">الساعة الذكية</button>
         </div>
         <fieldset id="kind" class="sports-picker">
-          <legend><span class="activity-heading"><svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-sport"></use></svg><span data-label="type">نوع النشاط</span></span></legend>
+          <legend><span class="activity-heading"><svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-sport"></use></svg><span data-label="type">نوع النشاط</span></span></legend>
           <div class="sports-grid">
             <label>
               <input type="radio" name="activity-kind" value="walk" checked>
@@ -95,18 +95,18 @@
         </fieldset>
         <label class="gps-choice">
           <input id="use-gps" type="checkbox" checked>
-          <svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-gps"></use></svg><span data-label="useGPS">تسجيل المسار والمسافة بالـGPS</span>
+          <svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-gps"></use></svg><span data-label="useGPS">تسجيل المسار والمسافة بالـGPS</span>
         </label>
-        <label class="activity-heading note-label" for="activity-description"><svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-note"></use></svg><span data-label="activityDescription">وصف النشاط (اختياري)</span></label>
+        <label class="activity-heading note-label" for="activity-description"><svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-note"></use></svg><span data-label="activityDescription">وصف النشاط (اختياري)</span></label>
         <textarea id="activity-description" maxlength="280" rows="2" data-placeholder="descriptionPlaceholder" placeholder="مثل مسار التمرين أو ملاحظاتك"></textarea>
         <p class="hint saved-description" id="saved-description" hidden></p>
         <div class="stats">
-          <div><output id="distance">٠٫٠٠</output><span class="activity-metric"><svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-distance"></use></svg><span data-label="km">كيلومتر</span></span></div>
-          <div><output id="elapsed">00:00</output><span class="activity-metric"><svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-time"></use></svg><span data-label="elapsed">المدة</span></span></div>
-          <div><output id="pace">—</output><span class="activity-metric"><svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-pace"></use></svg><span id="pace-label" data-label="pace">دقيقة / كم</span></span></div>
-          <div><output id="steps">—</output><span class="activity-metric"><svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-steps"></use></svg><span data-label="steps">الخطوات</span></span></div>
-          <div><output id="heart">—</output><span class="activity-metric"><svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-heart"></use></svg><span id="heart-label" data-label="heartLive">النبض (نبضة/د)</span></span></div>
-          <div><output id="cadence">—</output><span class="activity-metric"><svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-cadence"></use></svg><span data-label="cadence">وتيرة الخطوات</span></span></div>
+          <div><output id="distance">٠٫٠٠</output><span class="activity-metric"><svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-distance"></use></svg><span data-label="km">كيلومتر</span></span></div>
+          <div><output id="elapsed">00:00</output><span class="activity-metric"><svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-time"></use></svg><span data-label="elapsed">المدة</span></span></div>
+          <div><output id="pace">—</output><span class="activity-metric"><svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-pace"></use></svg><span id="pace-label" data-label="pace">دقيقة / كم</span></span></div>
+          <div><output id="steps">—</output><span class="activity-metric"><svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-steps"></use></svg><span data-label="steps">الخطوات</span></span></div>
+          <div><output id="heart">—</output><span class="activity-metric"><svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-heart"></use></svg><span id="heart-label" data-label="heartLive">النبض (نبضة/د)</span></span></div>
+          <div><output id="cadence">—</output><span class="activity-metric"><svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-cadence"></use></svg><span data-label="cadence">وتيرة الخطوات</span></span></div>
         </div>
         <p id="source" class="hint" hidden></p>
         <div class="buttons">
@@ -117,7 +117,7 @@
       </section>
 
       <section class="card route-card" aria-labelledby="route-title">
-        <h3 id="route-title" class="activity-heading"><svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-map"></use></svg><span data-label="route">خريطة المسار</span></h3>
+        <h3 id="route-title" class="activity-heading"><svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-map"></use></svg><span data-label="route">خريطة المسار</span></h3>
         <div class="map-frame">
           <div id="map" hidden></div>
           <canvas id="route-preview" width="720" height="430" role="img" aria-label="رسم المسار" hidden></canvas>
@@ -127,7 +127,7 @@
         <a id="google-endpoint" class="map-link" data-label="googleEndpoint" hidden>افتح نقطة نهاية المسار في خرائط Google</a>
         <section class="split-section" id="distance-section" aria-labelledby="distance-title">
           <div class="section-header">
-            <h3 id="distance-title" class="activity-heading"><svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-chart"></use></svg><span data-label="distanceChart">المسافة مع الوقت</span></h3>
+            <h3 id="distance-title" class="activity-heading"><svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-chart"></use></svg><span data-label="distanceChart">المسافة مع الوقت</span></h3>
             <output id="distance-sample" aria-live="polite"></output>
           </div>
           <p id="distance-empty" class="hint" data-label="distanceEmpty">يظهر المخطط بعد تسجيل مسافة بالـGPS.</p>
@@ -139,7 +139,7 @@
         </section>
         <section class="split-section" id="split-section" aria-labelledby="split-title" hidden>
           <div class="section-header">
-            <h3 id="split-title" class="activity-heading"><svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-split"></use></svg><span data-label="splits">تقسيمات الكيلومتر</span></h3>
+            <h3 id="split-title" class="activity-heading"><svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-split"></use></svg><span data-label="splits">تقسيمات الكيلومتر</span></h3>
             <span class="hint" data-label="splitTime">زمن كل كم</span>
           </div>
           <ol id="splits"></ol>
@@ -147,7 +147,7 @@
       </section>
 
       <section class="card" aria-labelledby="watch-title">
-        <h3 id="watch-title" class="activity-heading" tabindex="-1"><svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-watch"></use></svg><span data-label="watch">الساعة الذكية</span></h3>
+        <h3 id="watch-title" class="activity-heading" tabindex="-1"><svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-watch"></use></svg><span data-label="watch">الساعة الذكية</span></h3>
         <p class="hint" data-label="watchHelp">استورد مسار GPX أو TCX من تطبيق ساعتك. يتوفر الربط المباشر مع الأجهزة التي تبثّ بيانات الخطوات عبر Bluetooth RSC في المتصفحات الداعمة.</p>
         <div class="buttons">
           <button id="import" data-label="import">استيراد مسار</button>
@@ -168,7 +168,7 @@
       </section>
 
       <section class="card" aria-labelledby="history-title">
-        <h3 id="history-title" class="activity-heading"><svg class="activity-icon" aria-hidden="true" focusable="false"><use href="#activity-icon-history"></use></svg><span data-label="history">سجل النشاط</span></h3>
+        <h3 id="history-title" class="activity-heading"><svg class="activity-icon" width="18" height="18" aria-hidden="true" focusable="false"><use href="#activity-icon-history"></use></svg><span data-label="history">سجل النشاط</span></h3>
         <p id="history-empty" class="hint" data-label="historyEmpty">ستظهر الجلسات المحفوظة هنا.</p>
         <ul id="sessions"></ul>
       </section>

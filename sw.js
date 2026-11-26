@@ -1,6 +1,6 @@
 // I42FIT v1.1 — scoped offline cache
-const VERSION = 'i42-v17';
-const SHELL = ['index.html','gym-app.html','activity.html','activity.css','activity.js','navigation.css','app-header.js','manifest.json','icon.png','apple-touch-icon.png'];
+const VERSION = 'i42-v18';
+const SHELL = ['index.html','gym-app.html','activity.html','activity.css?v=18','activity.js?v=18','navigation.css','app-header.js','manifest.json','icon.png','apple-touch-icon.png'];
 const EXTRA = ['https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js'];
 const scope = new URL(self.registration.scope);
 self.addEventListener('install', e => {
