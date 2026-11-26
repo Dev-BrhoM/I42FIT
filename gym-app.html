@@ -244,7 +244,7 @@ a{color:var(--accent)}
     <h3 id="previewTitle" data-i18n="videoPreview">معاينة الفيديو</h3>
     <form method="dialog"><button class="ghost" data-i18n="close">إغلاق</button></form>
   </div>
-  <iframe id="previewFrame" title="YouTube" referrerpolicy="strict-origin-when-cross-origin" allow="encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>
+  <iframe id="previewFrame" title="YouTube" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>
   <div class="preview-actions">
     <a class="ghost" id="previewExternal" target="_blank" rel="noopener" data-i18n="watchVideo">شاهد على YouTube</a>
   </div>
@@ -485,7 +485,7 @@ document.addEventListener('click', event => {
   if (typeof preview.showModal !== 'function') return;
   event.preventDefault();
   $('#previewExternal').href = ytWatch(id);
-  previewFrame.src = 'https://www.youtube.com/embed/' + id + '?playsinline=1&rel=0';
+  previewFrame.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&mute=1&playsinline=1&rel=0';
   if (!preview.open) preview.showModal();
 });
 preview.addEventListener('close', () => previewFrame.removeAttribute('src'));
