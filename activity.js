@@ -107,7 +107,13 @@ let nativeSaving = false;
 let nativeSensorState = {};
 const storageKey = 'i42-activity-sessions';
 const maxPoints = 6000;
-const activityKinds = ['walk', 'run', 'hike', 'bike', 'padel', 'strength'];
+const kindOptions = [...$('kind').querySelectorAll('input[type="radio"]')];
+const activityKinds = kindOptions.map(option => option.value);
+const chosenKind = () => kindOptions.find(option => option.checked).value;
+function selectKind(kind) {
+  const option = kindOptions.find(choice => choice.value === kind);
+  if (option) option.checked = true;
+}
 const read = (key, fallback) => {
   try {
     return JSON.parse(localStorage.getItem(key)) ?? fallback;
@@ -221,7 +227,7 @@ function showStats(session) {
   const seconds = current ? (Date.now() - current.started) / 1000 : session?.seconds ?? 0;
   $('elapsed').textContent = elapsed(Math.max(0, seconds));
   const km = (session?.meters ?? 0) / 1000;
-  const cycling = session?.kind === 'bike' || !session && $('kind').value === 'bike';
+  const cycling = session?.kind === 'bike' || !session && chosenKind() === 'bike';
   $('pace-label').textContent = t(cycling ? 'speed' : 'pace');
   $('pace').textContent = km >= .02 && seconds > 0
     ? (cycling ? formatKm.format(km * 3600 / seconds) : elapsed(seconds / km)) : '—';
@@ -484,7 +490,7 @@ function renderHistory() {
     button.append(name, date);
     button.onclick = () => {
       selected = session;
-      $('kind').value = session.kind;
+      selectKind(session.kind);
       updateView();
       $('session-title').focus();
     };
@@ -511,7 +517,7 @@ function save(session, statusId) {
 function updateView() {
   $('session-title').textContent = t(selected && !current && !pendingImport ? 'sessionSummary' : 'session');
   $('start').hidden = Boolean(current);
-  if (current) $('kind').value = current.kind;
+  if (current) selectKind(current.kind);
   $('start').disabled = Boolean(pendingImport);
   $('stop').hidden = !current;
   $('stop').disabled = nativeSaving;
@@ -596,7 +602,7 @@ async function enableMotion(session) {
 
 function startTracking() {
   if (current || pendingImport) return;
-  const kind = $('kind').value;
+  const kind = chosenKind();
   const useGPS = $('use-gps').checked;
   if (nativeTracker) {
     nativeTracker.postMessage({ action: 'start', kind, gps: useGPS ? 'on' : 'off' });
@@ -716,7 +722,7 @@ async function readRoute(file) {
     const session = parseRoute(await file.text());
     if (current || pendingImport) return;
     pendingImport = session;
-    if (session.kind) $('kind').value = session.kind;
+    if (session.kind) selectKind(session.kind);
     $('watch-steps').value = '';
     $('watch-status').textContent = t('importReady');
     updateView();
@@ -799,7 +805,7 @@ $('import-details').onsubmit = event => {
   if (!pendingImport) return;
   const session = pendingImport;
   pendingImport = null;
-  session.kind = $('kind').value;
+  session.kind = chosenKind();
   const input = $('watch-steps');
   if (input.value !== '') {
     session.steps = input.valueAsNumber;

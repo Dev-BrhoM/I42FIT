@@ -28,15 +28,53 @@
           <h3 id="session-title" tabindex="-1" data-label="session">جلسة النشاط</h3>
           <button id="watch-shortcut" class="quiet" type="button" data-label="watch">الساعة الذكية</button>
         </div>
-        <label for="kind" data-label="type">نوع النشاط</label>
-        <select id="kind">
-          <option value="walk" data-label="walk">مشي</option>
-          <option value="run" data-label="run">جري</option>
-          <option value="hike" data-label="hike">تنزّه</option>
-          <option value="bike" data-label="bike">دراجة</option>
-          <option value="padel" data-label="padel">بادل</option>
-          <option value="strength" data-label="strength">حديد</option>
-        </select>
+        <fieldset id="kind" class="sports-picker">
+          <legend data-label="type">نوع النشاط</legend>
+          <div class="sports-grid">
+            <label>
+              <input type="radio" name="activity-kind" value="walk" checked>
+              <span class="sport-tile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="13" cy="4" r="2"/><path d="m8 21 3-6m2-7-3 3-4 1m7-4 2 4 4 2m-6-6-1 7 4 6"/></svg>
+                <span data-label="walk">مشي</span>
+              </span>
+            </label>
+            <label>
+              <input type="radio" name="activity-kind" value="run">
+              <span class="sport-tile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="16" cy="4" r="2"/><path d="m13 8-4 4-4-1m8-3 3 4h4m-7-4-3 6 5 2 1 5M3 20h5l3-4"/></svg>
+                <span data-label="run">جري</span>
+              </span>
+            </label>
+            <label>
+              <input type="radio" name="activity-kind" value="hike">
+              <span class="sport-tile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 19 9 6l5 8 3-4 5 9ZM6 12l3 2 2-3"/></svg>
+                <span data-label="hike">تنزّه</span>
+              </span>
+            </label>
+            <label>
+              <input type="radio" name="activity-kind" value="bike">
+              <span class="sport-tile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="5" cy="16" r="4"/><circle cx="19" cy="16" r="4"/><path d="M5 16 9 8l5 8H5m9 0 3-9h-3m3 0 2 9M7 8h4"/></svg>
+                <span data-label="bike">دراجة</span>
+              </span>
+            </label>
+            <label>
+              <input type="radio" name="activity-kind" value="padel">
+              <span class="sport-tile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 3a5 5 0 0 1 7 7l-5 5a5 5 0 0 1-7-7ZM9 15l-5 5m-1-1 2 2"/><path d="M14 7h.01M17 7h.01M14 10h.01M17 10h.01"/></svg>
+                <span data-label="padel">بادل</span>
+              </span>
+            </label>
+            <label>
+              <input type="radio" name="activity-kind" value="strength">
+              <span class="sport-tile">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 10h2m16 0h2M2 14h2m16 0h2M8 10h8m-8 4h8"/><rect x="4" y="6" width="4" height="12" rx="1"/><rect x="16" y="6" width="4" height="12" rx="1"/></svg>
+                <span data-label="strength">حديد</span>
+              </span>
+            </label>
+          </div>
+        </fieldset>
         <label class="gps-choice">
           <input id="use-gps" type="checkbox" checked>
           <span data-label="useGPS">تسجيل المسار والمسافة بالـGPS</span>

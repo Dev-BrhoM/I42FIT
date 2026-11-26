@@ -31,7 +31,6 @@
 .panel{display:none}.panel.on{display:block}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:14px}
-.video{aspect-ratio:16/9;width:100%;border:0;border-radius:10px;background:var(--surface2)}
 .tag{display:inline-block;background:var(--accent-soft);color:var(--accent);font-size:.8rem;padding:2px 10px;border-radius:99px;font-weight:600}
 form{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
 label{font-size:.85rem;color:var(--muted);display:flex;flex-direction:column;gap:4px}
@@ -234,19 +233,6 @@ a{color:var(--accent)}
   </div>
 </div>
 
-<div class="modal" id="playerModal" role="dialog" aria-modal="true" aria-labelledby="playerTitle">
-  <div class="sheet" style="max-width:720px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px">
-      <h3 id="playerTitle" data-i18n="howTo"></h3>
-      <div style="display:flex;gap:6px">
-        <a class="ghost" id="playerOpen" target="_blank" rel="noopener" style="text-decoration:none;display:grid;place-items:center">YouTube</a>
-        <button class="ghost" id="playerClose" data-i18n="close"></button>
-      </div>
-    </div>
-    <iframe id="playerFrame" class="video" src="about:blank" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
-  </div>
-</div>
-
 <div class="modal" id="scanModal" role="dialog" aria-modal="true" aria-labelledby="scanTitleHeading">
   <div class="sheet">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
@@ -267,7 +253,24 @@ const store = {
   set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)) }catch(e){} }
 };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function ytId(url){ const m = String(url||'').match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/); return m ? m[1] : null; }
+function ytId(value) {
+  const input = String(value || '').trim();
+  if (!input) return null;
+  try {
+    const url = new URL(input.includes('://') ? input : 'https://' + input);
+    if (!['https:', 'http:'].includes(url.protocol)) return null;
+    const host = url.hostname.toLowerCase();
+    const [route, resource] = url.pathname.split('/').filter(Boolean);
+    const isYouTube = ['youtube.com', 'www.youtube.com', 'm.youtube.com', 'youtube-nocookie.com', 'www.youtube-nocookie.com'].includes(host);
+    const id = host === 'youtu.be' ? route : isYouTube && (route === 'watch'
+      ? url.searchParams.get('v')
+      : ['embed', 'shorts', 'live'].includes(route) ? resource : null);
+    return typeof id === 'string' && /^[\w-]{11}$/.test(id) ? id : null;
+  } catch {
+    return null;
+  }
+}
+const ytWatch = id => 'https://www.youtube.com/watch?v=' + id;
 const ytSearch = q => 'https://www.youtube.com/results?search_query=' + encodeURIComponent(q);
 
 // ===== الترجمة =====
@@ -284,7 +287,7 @@ ar: {
   noEx:'لا توجد تمارين بعد — أضف أول تمرين من الأعلى', myVideos:'فيديوهاتي',
   library:'مكتبة التمارين', librarySub:'اضغط على أي تمرين لمشاهدة شرحه من قناة Jeff Nippard.', searchEx:'ابحث عن تمرين…',
   all:'الكل', noMatch:'لا يوجد تمرين بهذا الاسم', allVideos:'كل فيديوهات القناة',
-  needNet:'تشغيل الفيديو يحتاج اتصال بالإنترنت', howTo:'شرح التمرين', close:'إغلاق',
+  howTo:'شرح التمرين', watchVideo:'شاهد على YouTube', close:'إغلاق',
   nutritionSub:'احسب احتياجك اليومي واتبع وجبات متوازنة.', calc:'حاسبة السعرات', heightCm:'الطول (سم)', age:'العمر', sex:'الجنس',
   male:'ذكر', female:'أنثى', goal:'الهدف', cut:'خسارة دهون', maintain:'ثبات', bulk:'بناء عضل', calculate:'احسب',
   kcal:'سعرة', proteinG:'بروتين (غ)', carbsG:'كارب (غ)', fatG:'دهون (غ)',
@@ -319,7 +322,7 @@ en: {
   noEx:'No exercises yet — add your first one above', myVideos:'My videos',
   library:'Exercise library', librarySub:'Tap any exercise to watch the explanation from Jeff Nippard\'s channel.', searchEx:'Search exercises…',
   all:'All', noMatch:'No exercise matches that name', allVideos:'All channel videos',
-  needNet:'Playing videos needs an internet connection', howTo:'How to do it', close:'Close',
+  howTo:'How to do it', watchVideo:'Watch on YouTube', close:'Close',
   nutritionSub:'Work out your daily needs and follow balanced meals.', calc:'Calorie calculator', heightCm:'Height (cm)', age:'Age', sex:'Sex',
   male:'Male', female:'Female', goal:'Goal', cut:'Lose fat', maintain:'Maintain', bulk:'Build muscle', calculate:'Calculate',
   kcal:'kcal', proteinG:'Protein (g)', carbsG:'Carbs (g)', fatG:'Fat (g)',
@@ -433,7 +436,6 @@ const progName = e => lang === 'ar' ? e[0] : (e[6] || title(e[1]));
 
 // فيديو الشرح المباشر لكل تمرين من قناة Jeff Nippard
 const VID = {"bench press":"hWbUlkb5Ms4","incline press":"xGMqmmn5Z7Q","dumbbell press":"B_2meD6SSNA","cable fly":"qg3B1Uu6dto","dips":"yN6Q1UI_xkE","push up":"7RFG9k99AOU","pec deck":"3TN4otAxzZk","deadlift":"ZaTM37cfiDs","pull up":"Hdc7Mw6BIEE","lat pulldown":"hnSqbBk15tw","barbell row":"axoeDmW0oAY","seated cable row":"PAXkl-AdJFg","dumbbell row":"djKXLt7kv7Q","t-bar row":"1mGXae-LCiM","pullover":"jLvqKgW-_G8","squat":"PPmvh7gBTi0","romanian deadlift":"_oyxCn2iSjU","leg press":"nDh_BlnLCGc","hack squat":"FmNpOsEWms4","bulgarian split squat":"A9OxBT-6Mw0","lunge":"rGpIVqAQc-Y","leg extension":"ztNBgrGy6FQ","leg curl":"Lh3iMIcbkBQ","hip thrust":"xDmFkJxPzeM","calf raise":"baEXLy09Ncc","overhead press":"_RlRDWO2jfg","lateral raise":"f_OGBg2KxgY","face pull":"zEuseRjS7vg","rear delt fly":"zEuseRjS7vg","shrug":"r74q9EF_ni4","bicep curl":"_GziHDdJY10","hammer curl":"_GziHDdJY10","preacher curl":"_GziHDdJY10","tricep pushdown":"5YaWrGPtIIE","overhead tricep extension":"5YaWrGPtIIE","skull crusher":"5YaWrGPtIIE","cable crunch":"2RrGnjxSsiA","hanging leg raise":"eLCBC6fjtQU","ab wheel":"1G0y8D5rFDc"};
-const jeff = q => 'https://www.youtube.com/@JeffNippard/search?query=' + encodeURIComponent(q);
 // الاسم (عربي أو إنجليزي) → مفتاح الفيديو
 const KEY = {};
 Object.values(libGroups).flat().forEach(([ar,en]) => { KEY[ar] = en; KEY[en] = en; });
@@ -442,37 +444,23 @@ Object.assign(KEY, { 'بنش برس بالبار':'bench press', 'ضغط أكت�
   'رفرفة أمامية (ليق إكستنشن)':'leg extension', 'ثني خلفي (ليق كيرل)':'leg curl' });
 const keyOf = name => { const normalized = String(name).toLowerCase().trim(); const k = Object.prototype.hasOwnProperty.call(KEY,name) ? KEY[name] : Object.prototype.hasOwnProperty.call(KEY,normalized) ? KEY[normalized] : ''; return typeof k === 'string' ? k : ''; };
 const vidId = (name, key) => { const id = VID[key || keyOf(name)]; return typeof id === 'string' && /^[\w-]{11}$/.test(id) ? id : ''; };
-function vidFor(name, key){
-  const k = key || keyOf(name);
-  if (k) return jeff(k);
-  if (/[a-z]/i.test(name)) return jeff(name);
+function vidFor(name, key, savedURL) {
+  const id = ytId(savedURL) || vidId(name, key);
+  if (id) return ytWatch(id);
+  const exercise = key || keyOf(name);
+  if (exercise || /[a-z]/i.test(name)) return ytSearch('Jeff Nippard ' + (exercise || name) + ' technique');
   return ytSearch((lang === 'ar' ? 'طريقة أداء تمرين ' : 'how to ') + name);
 }
-
-// مشغّل الفيديو داخل التطبيق
-document.addEventListener('click', ev => {
-  const a = ev.target.closest('a[data-vid]');
-  if (!a || !a.dataset.vid) return;        // بدون فيديو محدد → يفتح البحث في القناة
-  ev.preventDefault();
-  if (!navigator.onLine){ alert(t('needNet')); return; }
-  $('#playerFrame').src = `https://www.youtube-nocookie.com/embed/${a.dataset.vid}?autoplay=1&playsinline=1&rel=0`;
-  $('#playerOpen').href = 'https://youtu.be/' + a.dataset.vid;
-  $('#playerModal').classList.add('on');
-});
-function closePlayer(){ $('#playerModal').classList.remove('on'); $('#playerFrame').src = 'about:blank'; }
-$('#playerClose').onclick = closePlayer;
-$('#playerModal').onclick = ev => { if (ev.target.id === 'playerModal') closePlayer(); };
 
 // ===== سجل التمارين =====
 let ex = store.get('exercises', []);
 function renderEx(){
   $('#exBody').innerHTML = ex.length ? ex.map((e,i) => {
-    const vid = ytId(e.video) || vidId(e.name, e.key);
-    const href = ytId(e.video) ? 'https://youtu.be/' + ytId(e.video) : vidFor(e.name, e.key);
+    const href = vidFor(e.name, e.key, e.video);
     const name = e.ar && e.en ? (lang === 'ar' ? e.ar : e.en) : e.name;
     return `<tr><td><b>${esc(name)}</b></td><td><span class="tag">${esc(tv(e.muscle))}</span></td><td>${esc(tv(e.equip))}</td>
     <td>${e.weight ? esc(e.weight)+' '+t('kg') : '—'}</td><td>${esc(e.sets)} × ${esc(e.reps)}</td>
-    <td><a data-vid="${vid}" href="${href}" target="_blank" rel="noopener">▶</a></td>
+    <td><a href="${href}" target="_blank" rel="noopener" aria-label="${t('howTo')}">▶</a></td>
     <td><button class="ghost" data-del="${i}">${t('del')}</button></td></tr>`; }).join('')
     : `<tr><td colspan="7" class="empty">${t('noEx')}</td></tr>`;
   $('#sCount').textContent = ex.length.toLocaleString(loc());
@@ -480,7 +468,7 @@ function renderEx(){
   $('#sVol').textContent = ex.reduce((a,e) => a + (+e.weight||0) * e.sets * e.reps, 0).toLocaleString(loc());
   const vids = ex.filter(e => ytId(e.video));
   $('#myVideos').innerHTML = vids.length ? `<h3 style="margin:8px 0 12px">${t('myVideos')}</h3><div class="grid">${vids.map(e =>
-    `<div class="card"><iframe class="video" src="https://www.youtube-nocookie.com/embed/${ytId(e.video)}" allowfullscreen loading="lazy"></iframe><h3 style="margin-top:10px">${esc(e.name)}</h3></div>`).join('')}</div>` : '';
+    `<div class="card"><h3 style="margin-bottom:8px">${esc(e.name)}</h3><a class="btn" href="${ytWatch(ytId(e.video))}" target="_blank" rel="noopener">${t('watchVideo')}</a></div>`).join('')}</div>` : '';
 }
 $('#exForm').onsubmit = ev => {
   ev.preventDefault();
@@ -501,7 +489,7 @@ function renderProg(){
   $('#progDesc').textContent = t(progDesc[prog]);
   $('#progList').innerHTML = programs[prog].map((e,i) => `<div class="prog"><span class="n">${(i+1).toLocaleString(loc())}</span>
     <div class="info"><b>${progName(e)}</b><div class="meta">${t(e[3])} · ${e[4]} × ${e[5]}</div></div>
-    <a class="ghost" data-vid="${VID[e[1]]||''}" href="${jeff(e[1])}" target="_blank" rel="noopener" style="text-decoration:none;padding:6px 10px">▶</a>
+    <a class="ghost" href="${vidFor(e[0], e[1])}" aria-label="${t('howTo')}" target="_blank" rel="noopener" style="text-decoration:none;padding:6px 10px">▶</a>
     <button class="ghost" data-pi="${i}">${t('addOne')}</button></div>`).join('');
 }
 $('#progChips').onclick = ev => { if (ev.target.dataset.p){ prog = ev.target.dataset.p; store.set('prog', prog); renderProg(); } };
@@ -523,7 +511,7 @@ function renderLib(){
   const rows = Object.entries(libGroups).filter(([g]) => libTab === 'all' || g === libTab)
     .flatMap(([g, list]) => list.map(([ar, en]) => ({g, ar, en})))
     .filter(e => !q || e.ar.includes(q) || e.en.includes(q));
-  $('#libList').innerHTML = rows.length ? rows.map(e => `<a class="prog" data-vid="${VID[e.en]||''}" href="${jeff(e.en)}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
+  $('#libList').innerHTML = rows.length ? rows.map(e => `<a class="prog" href="${vidFor(e.ar, e.en)}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit">
       <span class="n">▶</span><div class="info"><b>${exName(e.ar, e.en)}</b><div class="meta">${lang === 'ar' ? e.en + ' · ' : ''}${t(e.g)}</div></div></a>`).join('')
     : `<p class="empty">${t('noMatch')}</p>`;
 }
