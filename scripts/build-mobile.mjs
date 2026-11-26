@@ -1,0 +1,11 @@
+import { mkdir, readFile, writeFile, copyFile } from 'node:fs/promises';
+import { build } from 'esbuild';
+await mkdir('www',{recursive:true});
+let html=await readFile('gym-app.html','utf8');
+if(!html.includes('</body>')) throw Error('Missing body');
+html=html.replace('</body>','<script src="native-health.js"></script></body>');
+await writeFile('www/index.html',html);
+await copyFile('icon.png','www/icon.png');
+await copyFile('manifest.json','www/manifest.json');
+await copyFile('sw.js','www/sw.js');
+await build({entryPoints:['mobile/native-health.js'],bundle:true,outfile:'www/native-health.js',platform:'browser',target:'es2022'});
