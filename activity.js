@@ -2,6 +2,9 @@
 
 const labels = {
   ar: {
+    activityIntro: 'سجّل تمرينك وتابع الخطوات والمدة والمسافة. فعّل GPS لرسم المسار على الخريطة.',
+    activityDescription: 'وصف النشاط (اختياري)', descriptionPlaceholder: 'مثل مسار التمرين أو ملاحظاتك',
+
     padel: 'بادل', strength: 'حديد', theme: 'الوضع', light: 'نهاري', dark: 'ليلي', offline: 'بدون إنترنت',
     useGPS: 'تسجيل المسار والمسافة بالـGPS', trackingNoGPS: 'الجلسة جارية. تسجيل المسافة والمسار متوقف.',
     distanceChart: 'المسافة مع الوقت', distanceEmpty: 'يظهر المخطط بعد تسجيل مسافة بالـGPS.', distanceHelp: 'حرّك المؤشر لعرض نقطة المسافة على الخريطة.',
@@ -51,6 +54,9 @@ const labels = {
     trackLimit: 'تم بلوغ حد نقاط المسار. احفظ الجلسة وابدأ جلسة جديدة لمتابعة رسم المسار.',
   },
   en: {
+    activityIntro: 'Record your workout and see steps, time, and distance. Enable GPS to map your route.',
+    activityDescription: 'Activity description (optional)', descriptionPlaceholder: 'For example, your route or workout notes',
+
     padel: 'Padel', strength: 'Strength training', theme: 'Theme', light: 'Light', dark: 'Dark', offline: 'Offline',
     useGPS: 'Record route and distance with GPS', trackingNoGPS: 'Session in progress. Distance and route recording are off.',
     distanceChart: 'Distance over time', distanceEmpty: 'The chart appears after recording GPS distance.', distanceHelp: 'Move the slider to show that point on the map.',
@@ -148,6 +154,9 @@ function applyLanguage() {
   document.title = t('activity') + ' | I42FIT';
   document.querySelectorAll('[data-label], #app-header [data-i18n]').forEach(element => {
     element.textContent = t(element.dataset.label ?? element.dataset.i18n);
+  });
+  document.querySelectorAll('[data-placeholder]').forEach(element => {
+    element.placeholder = t(element.dataset.placeholder);
   });
   $('app-navigation').setAttribute('aria-label', t('navigation'));
   $('route-preview').setAttribute('aria-label', t('mapAlt'));
@@ -488,6 +497,12 @@ function renderHistory() {
     const date = document.createElement('small');
     date.textContent = formatDate.format(session.started);
     button.append(name, date);
+    if (typeof session.description === 'string' && session.description) {
+      const description = document.createElement('small');
+      description.className = 'saved-description';
+      description.textContent = session.description;
+      button.append(description);
+    }
     button.onclick = () => {
       selected = session;
       selectKind(session.kind);
@@ -501,6 +516,7 @@ function renderHistory() {
 
 function save(session, statusId) {
   selected = session;
+  $('activity-description').value = '';
   let persisted = false;
   try {
     const sessions = [session, ...savedSessions().filter(s => s.id !== session.id)];
@@ -515,7 +531,7 @@ function save(session, statusId) {
 }
 
 function updateView() {
-  $('session-title').textContent = t(selected && !current && !pendingImport ? 'sessionSummary' : 'session');
+  $('session-label').textContent = t(selected && !current && !pendingImport ? 'sessionSummary' : 'session');
   $('start').hidden = Boolean(current);
   if (current) selectKind(current.kind);
   $('start').disabled = Boolean(pendingImport);
@@ -526,6 +542,12 @@ function updateView() {
   $('import').disabled = Boolean(current || pendingImport);
   $('import-details').hidden = !pendingImport;
   const session = current ?? pendingImport ?? selected;
+  const description = $('activity-description');
+  description.readOnly = Boolean(current);
+  if (current) description.value = current.description ?? '';
+  $('saved-description').textContent = !current && !pendingImport && typeof selected?.description === 'string'
+    ? selected.description : '';
+  $('saved-description').hidden = !$('saved-description').textContent;
   showStats(session);
   renderSplits(session);
   renderDistance(session);
@@ -604,11 +626,12 @@ function startTracking() {
   if (current || pendingImport) return;
   const kind = chosenKind();
   const useGPS = $('use-gps').checked;
+  const description = $('activity-description').value.trim().slice(0, 280);
   if (nativeTracker) {
-    nativeTracker.postMessage({ action: 'start', kind, gps: useGPS ? 'on' : 'off' });
+    nativeTracker.postMessage({ action: 'start', kind, gps: useGPS ? 'on' : 'off', description });
     return;
   }
-  current = { id: crypto.randomUUID(), started: Date.now(), seconds: 0, kind, meters: 0, steps: null, paths: [], distanceSamples: [],
+  current = { id: crypto.randomUUID(), started: Date.now(), seconds: 0, kind, meters: 0, steps: null, paths: [], distanceSamples: [], description,
     source: kind === 'bike' ? 'bikeSteps' : 'noSteps' };
   const session = current;
   pointCount = 0;
@@ -806,6 +829,7 @@ $('import-details').onsubmit = event => {
   const session = pendingImport;
   pendingImport = null;
   session.kind = chosenKind();
+  session.description = $('activity-description').value.trim().slice(0, 280);
   const input = $('watch-steps');
   if (input.value !== '') {
     session.steps = input.valueAsNumber;

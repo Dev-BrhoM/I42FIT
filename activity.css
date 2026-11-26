@@ -118,3 +118,33 @@ button.primary { background: var(--accent); color: var(--accent-ink); border-col
 .sports-grid input:checked + .sport-tile { background: var(--accent-soft); border-color: var(--accent); }
 .sports-grid input:focus-visible + .sport-tile { outline: 2px solid var(--accent); outline-offset: 2px; }
 .sports-picker:disabled .sport-tile { cursor: default; opacity: .65; }
+
+
+.activity-icon-defs { position: absolute; overflow: hidden; pointer-events: none; }
+.activity-icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  color: var(--accent);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.activity-heading, .activity-metric { display: flex; align-items: center; gap: 6px; }
+.activity-metric { justify-content: center; flex-wrap: wrap; gap: 3px 5px; }
+.activity-intro { color: var(--muted); margin: 0 0 16px; }
+.note-label { margin-top: 12px; }
+#activity-description {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 8px 10px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  resize: vertical;
+}
+.saved-description { overflow-wrap: anywhere; white-space: pre-wrap; }
