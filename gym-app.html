@@ -55,6 +55,7 @@ h2{font-size:1.5rem;margin-bottom:6px} h3{font-size:1.1rem}
 .seg svg{width:18px;height:18px}
 .tabs{display:flex;gap:6px;background:var(--surface2);padding:5px;border-radius:12px;margin-bottom:24px}
 .tab{flex:1;border:0;background:transparent;color:var(--muted);font:600 1rem var(--sans);padding:10px;border-radius:9px;cursor:pointer}
+.tab-link{display:grid;place-items:center;text-decoration:none;text-align:center;padding-inline:4px}
 .tab.on{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .panel{display:none}.panel.on{display:block}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
@@ -156,6 +157,7 @@ a{color:var(--accent)}
   <div class="tabs">
     <button class="tab on" data-t="workout" data-i18n="workouts"></button>
     <button class="tab" data-t="nutrition" data-i18n="nutrition"></button>
+    <a class="tab tab-link" href="activity.html" data-i18n="activity">النشاط</a>
   </div>
 
   <!-- التمارين -->
@@ -326,7 +328,7 @@ const ytSearch = q => 'https://www.youtube.com/results?search_query=' + encodeUR
 const T = {
 ar: {
   offline:'بدون إنترنت', theme:'الوضع', light:'نهاري', dark:'ليلي',
-  workouts:'التمارين', nutrition:'التغذية',
+  workouts:'التمارين', nutrition:'التغذية', activity:'النشاط',
   workoutsSub:'شاهد طريقة الأداء الصحيحة، وسجّل تمارينك بالأوزان والمعدات.',
   programs:'البرامج الجاهزة', addProgram:'أضف البرنامج كاملاً للسجل', added:'✓ أُضيف — عدّل الأوزان من السجل', addOne:'+ أضف',
   addExercise:'إضافة تمرين', exName:'اسم التمرين', exNamePh:'مثال: بنش برس', muscle:'العضلة', equip:'المعدة / الجهاز',
@@ -361,7 +363,7 @@ ar: {
 },
 en: {
   offline:'Offline', theme:'Theme', light:'Light', dark:'Dark',
-  workouts:'Workouts', nutrition:'Nutrition',
+  workouts:'Workouts', nutrition:'Nutrition', activity:'Activity',
   workoutsSub:'Watch proper form, and log your workouts with weights and equipment.',
   programs:'Ready-made programs', addProgram:'Add whole program to log', added:'✓ Added — adjust weights in your log', addOne:'+ Add',
   addExercise:'Add exercise', exName:'Exercise name', exNamePh:'e.g. Bench press', muscle:'Muscle', equip:'Equipment',
@@ -416,8 +418,8 @@ function applyStatic(){
 }
 
 // tabs
-document.querySelectorAll('.tab').forEach(b => b.onclick = () => {
-  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === b));
+document.querySelectorAll('.tab[data-t]').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tab[data-t]').forEach(x => x.classList.toggle('on', x === b));
   document.querySelectorAll('.panel').forEach(p => p.classList.toggle('on', p.id === b.dataset.t));
 });
 
