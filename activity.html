@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#086BA8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>النشاط | I42FIT</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="activity.css">
+  <script src="activity.js" defer></script>
+</head>
+<body>
+  <main>
+    <header class="top">
+      <a class="back" href="gym-app.html"><span aria-hidden="true">‹</span> I42FIT</a>
+    </header>
+    <h1 data-label="activity">النشاط</h1>
+
+    <div class="layout">
+      <section class="card controls" aria-labelledby="session-title">
+        <h2 id="session-title" data-label="session">جلسة النشاط</h2>
+        <label for="kind" data-label="type">نوع النشاط</label>
+        <select id="kind">
+          <option value="walk" data-label="walk">مشي</option>
+          <option value="run" data-label="run">جري</option>
+          <option value="hike" data-label="hike">تنزّه</option>
+          <option value="bike" data-label="bike">دراجة</option>
+        </select>
+        <div class="stats">
+          <div><output id="steps">—</output><span data-label="steps">الخطوات</span></div>
+          <div><output id="distance">٠٫٠٠</output><span data-label="km">كيلومتر</span></div>
+          <div><output id="elapsed">00:00</output><span data-label="elapsed">المدة</span></div>
+        </div>
+        <p id="source" class="hint" hidden></p>
+        <div class="buttons">
+          <button id="start" class="primary" data-label="start">ابدأ التسجيل</button>
+          <button id="stop" class="primary" data-label="stop" hidden>إنهاء وحفظ</button>
+        </div>
+        <p id="tracking-status" class="hint" role="status" data-label="ready">أبقِ صفحة النشاط مفتوحة أثناء التسجيل.</p>
+      </section>
+
+      <section class="card route-card" aria-labelledby="route-title">
+        <h2 id="route-title" data-label="route">خريطة المسار</h2>
+        <div class="map-frame">
+          <div id="map" hidden></div>
+          <canvas id="route-preview" width="720" height="430" role="img" aria-label="رسم المسار" hidden></canvas>
+          <p id="map-empty" data-label="mapEmpty">ابدأ التسجيل أو استورد مسارًا لعرضه هنا.</p>
+        </div>
+        <p id="map-status" class="hint" role="status" hidden></p>
+      </section>
+
+      <section class="card" aria-labelledby="watch-title">
+        <h2 id="watch-title" data-label="watch">الساعة الذكية</h2>
+        <p class="hint" data-label="watchHelp">استورد مسار GPX أو TCX من تطبيق ساعتك. يتوفر الربط المباشر مع الأجهزة التي تبثّ بيانات الخطوات عبر Bluetooth RSC في المتصفحات الداعمة.</p>
+        <div class="buttons">
+          <button id="import" data-label="import">استيراد مسار</button>
+          <button id="connect" data-label="connect">ربط Bluetooth</button>
+          <input id="route-file" type="file" accept=".gpx,.tcx,application/gpx+xml,application/vnd.garmin.tcx+xml" hidden>
+        </div>
+        <form id="import-details" hidden>
+          <label for="watch-steps" data-label="watchSteps">خطوات الساعة (اختياري)</label>
+          <input id="watch-steps" type="number" inputmode="numeric" min="0" max="1000000" step="1">
+          <div class="buttons">
+            <button type="submit" class="primary" data-label="saveImport">حفظ النشاط المستورد</button>
+            <button id="cancel-import" type="button" data-label="cancel">إلغاء</button>
+          </div>
+        </form>
+        <p id="watch-status" class="hint" role="status"></p>
+      </section>
+
+      <section class="card" aria-labelledby="history-title">
+        <h2 id="history-title" data-label="history">سجل النشاط</h2>
+        <p id="history-empty" class="hint" data-label="historyEmpty">ستظهر الجلسات المحفوظة هنا.</p>
+        <ul id="sessions"></ul>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
