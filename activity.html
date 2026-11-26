@@ -5,34 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#086BA8">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>النشاط | I42FIT</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" href="icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=Noto+Naskh+Arabic:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="navigation.css">
   <link rel="stylesheet" href="activity.css">
   <script src="activity.js" defer></script>
 </head>
-<body>
-  <main>
-    <header class="top">
-      <a class="back" href="gym-app.html"><span aria-hidden="true">‹</span> I42FIT</a>
-    </header>
-    <h1 data-label="activity">النشاط</h1>
+<body data-page="activity">
+  <main class="wrap">
+    <div id="app-header"></div>
+    <script src="app-header.js"></script>
+    <h2 data-label="activity">النشاط</h2>
 
     <div class="layout">
       <section class="card controls" aria-labelledby="session-title">
-        <h2 id="session-title" data-label="session">جلسة النشاط</h2>
+        <div class="section-header">
+          <h3 id="session-title" tabindex="-1" data-label="session">جلسة النشاط</h3>
+          <button id="watch-shortcut" class="quiet" type="button" data-label="watch">الساعة الذكية</button>
+        </div>
         <label for="kind" data-label="type">نوع النشاط</label>
         <select id="kind">
           <option value="walk" data-label="walk">مشي</option>
           <option value="run" data-label="run">جري</option>
           <option value="hike" data-label="hike">تنزّه</option>
           <option value="bike" data-label="bike">دراجة</option>
+          <option value="padel" data-label="padel">بادل</option>
+          <option value="strength" data-label="strength">حديد</option>
         </select>
+        <label class="gps-choice">
+          <input id="use-gps" type="checkbox" checked>
+          <span data-label="useGPS">تسجيل المسار والمسافة بالـGPS</span>
+        </label>
         <div class="stats">
-          <div><output id="steps">—</output><span data-label="steps">الخطوات</span></div>
           <div><output id="distance">٠٫٠٠</output><span data-label="km">كيلومتر</span></div>
           <div><output id="elapsed">00:00</output><span data-label="elapsed">المدة</span></div>
+          <div><output id="pace">—</output><span id="pace-label" data-label="pace">دقيقة / كم</span></div>
+          <div><output id="steps">—</output><span data-label="steps">الخطوات</span></div>
+          <div><output id="heart">—</output><span id="heart-label" data-label="heartLive">النبض (نبضة/د)</span></div>
+          <div><output id="cadence">—</output><span data-label="cadence">وتيرة الخطوات</span></div>
         </div>
         <p id="source" class="hint" hidden></p>
         <div class="buttons">
@@ -43,17 +58,37 @@
       </section>
 
       <section class="card route-card" aria-labelledby="route-title">
-        <h2 id="route-title" data-label="route">خريطة المسار</h2>
+        <h3 id="route-title" data-label="route">خريطة المسار</h3>
         <div class="map-frame">
           <div id="map" hidden></div>
           <canvas id="route-preview" width="720" height="430" role="img" aria-label="رسم المسار" hidden></canvas>
           <p id="map-empty" data-label="mapEmpty">ابدأ التسجيل أو استورد مسارًا لعرضه هنا.</p>
         </div>
         <p id="map-status" class="hint" role="status" hidden></p>
+        <a id="google-endpoint" class="map-link" data-label="googleEndpoint" hidden>افتح نقطة نهاية المسار في خرائط Google</a>
+        <section class="split-section" id="distance-section" aria-labelledby="distance-title">
+          <div class="section-header">
+            <h3 id="distance-title" data-label="distanceChart">المسافة مع الوقت</h3>
+            <output id="distance-sample" aria-live="polite"></output>
+          </div>
+          <p id="distance-empty" class="hint" data-label="distanceEmpty">يظهر المخطط بعد تسجيل مسافة بالـGPS.</p>
+          <div id="distance-data" hidden>
+            <canvas id="distance-chart" role="img" aria-labelledby="distance-title"></canvas>
+            <input id="distance-scrubber" type="range" min="0" value="0">
+            <p class="hint" data-label="distanceHelp">حرّك المؤشر لعرض نقطة المسافة على الخريطة.</p>
+          </div>
+        </section>
+        <section class="split-section" id="split-section" aria-labelledby="split-title" hidden>
+          <div class="section-header">
+            <h3 id="split-title" data-label="splits">تقسيمات الكيلومتر</h3>
+            <span class="hint" data-label="splitTime">زمن كل كم</span>
+          </div>
+          <ol id="splits"></ol>
+        </section>
       </section>
 
       <section class="card" aria-labelledby="watch-title">
-        <h2 id="watch-title" data-label="watch">الساعة الذكية</h2>
+        <h3 id="watch-title" tabindex="-1" data-label="watch">الساعة الذكية</h3>
         <p class="hint" data-label="watchHelp">استورد مسار GPX أو TCX من تطبيق ساعتك. يتوفر الربط المباشر مع الأجهزة التي تبثّ بيانات الخطوات عبر Bluetooth RSC في المتصفحات الداعمة.</p>
         <div class="buttons">
           <button id="import" data-label="import">استيراد مسار</button>
@@ -68,11 +103,13 @@
             <button id="cancel-import" type="button" data-label="cancel">إلغاء</button>
           </div>
         </form>
+        <p id="sensor-status" class="hint" role="status" hidden></p>
+        <ul id="sensor-list" class="sensor-list" hidden></ul>
         <p id="watch-status" class="hint" role="status"></p>
       </section>
 
       <section class="card" aria-labelledby="history-title">
-        <h2 id="history-title" data-label="history">سجل النشاط</h2>
+        <h3 id="history-title" data-label="history">سجل النشاط</h3>
         <p id="history-empty" class="hint" data-label="historyEmpty">ستظهر الجلسات المحفوظة هنا.</p>
         <ul id="sessions"></ul>
       </section>

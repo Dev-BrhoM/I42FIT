@@ -2,6 +2,31 @@
 
 const labels = {
   ar: {
+    padel: 'بادل', strength: 'حديد', theme: 'الوضع', light: 'نهاري', dark: 'ليلي', offline: 'بدون إنترنت',
+    useGPS: 'تسجيل المسار والمسافة بالـGPS', trackingNoGPS: 'الجلسة جارية. تسجيل المسافة والمسار متوقف.',
+    distanceChart: 'المسافة مع الوقت', distanceEmpty: 'يظهر المخطط بعد تسجيل مسافة بالـGPS.', distanceHelp: 'حرّك المؤشر لعرض نقطة المسافة على الخريطة.',
+
+    workouts: 'التمارين', nutrition: 'التغذية', navigation: 'التنقل الرئيسي',
+    googleEndpoint: 'افتح نقطة نهاية المسار في خرائط Google',
+    pace: 'دقيقة / كم', speed: 'كم / ساعة', heartLive: 'النبض (نبضة/د)', heartAverage: 'متوسط النبض',
+    heartMax: 'أقصى نبض', cadence: 'خطوة / دقيقة', splits: 'تقسيمات الكيلومتر', splitTime: 'زمن كل كم',
+    sessionSummary: 'ملخص النشاط', sensorHelp: 'فعّل بث النبض أو وتيرة الخطوات من الساعة ثم ابحث عنها هنا. يدعم التطبيق أجهزة Bluetooth LE التي تبثّ HR أو RSC. لساعة Apple Watch يمكنك استيراد المسار.',
+    sensorReady: 'جاهز للبحث عن ساعة أو حساس.', sensorStarting: 'جارٍ تهيئة Bluetooth…',
+    sensorScanning: 'جارٍ البحث عن الأجهزة القريبة…', sensorChoose: 'اختر الجهاز الذي تريد ربطه.',
+    sensorConnecting: 'جارٍ ربط الجهاز…', sensorConnected: 'متصل', sensorDisconnected: 'انقطع اتصال الجهاز.',
+    sensorNone: 'لم يُعثر على جهاز متوافق. فعّل البث من الساعة أو الحساس وأعد البحث.',
+    sensorFailed: 'تعذّر ربط الجهاز أو قراءة بياناته.', sensorOff: 'شغّل Bluetooth في الآيفون.',
+    sensorDenied: 'اسمح لـ I42FIT باستخدام Bluetooth من الإعدادات.', sensorUnsupported: 'Bluetooth LE غير متاح على هذا الجهاز.',
+    sensorUnnamed: 'حساس Bluetooth', searchWatch: 'البحث عن ساعة أو حساس',
+
+    nativeReady: 'يستمر تسجيل النشاط عند قفل الشاشة. ارجع إلى الصفحة لإنهاء الجلسة.',
+    nativeTracking: 'يجري تسجيل النشاط، بما في ذلك أثناء قفل الشاشة.',
+    nativeSaving: 'جارٍ استرداد خطوات الجلسة وحفظها…',
+    nativeInterrupted: 'استُعيد الجزء المحفوظ من جلسة انقطع تسجيلها.',
+    nativeSaveFailed: 'تعذّر حفظ بيانات الجلسة على الجهاز.',
+    nativeSteps: 'الخطوات من عدّاد الحركة في الآيفون.',
+    nativeLocationDenied: 'اسمح لـ I42FIT باستخدام الموقع أثناء استخدام التطبيق من إعدادات الآيفون.',
+
     activity: 'النشاط', session: 'جلسة النشاط', type: 'نوع النشاط', walk: 'مشي', run: 'جري', hike: 'تنزّه', bike: 'دراجة',
     steps: 'الخطوات', km: 'كيلومتر', elapsed: 'المدة', start: 'ابدأ التسجيل', stop: 'إنهاء وحفظ',
     ready: 'أبقِ صفحة النشاط مفتوحة والشاشة قيد التشغيل أثناء التسجيل.',
@@ -26,6 +51,31 @@ const labels = {
     trackLimit: 'تم بلوغ حد نقاط المسار. احفظ الجلسة وابدأ جلسة جديدة لمتابعة رسم المسار.',
   },
   en: {
+    padel: 'Padel', strength: 'Strength training', theme: 'Theme', light: 'Light', dark: 'Dark', offline: 'Offline',
+    useGPS: 'Record route and distance with GPS', trackingNoGPS: 'Session in progress. Distance and route recording are off.',
+    distanceChart: 'Distance over time', distanceEmpty: 'The chart appears after recording GPS distance.', distanceHelp: 'Move the slider to show that point on the map.',
+
+    workouts: 'Workouts', nutrition: 'Nutrition', navigation: 'Main navigation',
+    googleEndpoint: 'Open route endpoint in Google Maps',
+    pace: 'Min / km', speed: 'Km / h', heartLive: 'Heart rate (bpm)', heartAverage: 'Avg. heart rate',
+    heartMax: 'Peak heart rate', cadence: 'Steps / min', splits: 'Kilometer splits', splitTime: 'Time per km',
+    sessionSummary: 'Activity summary', sensorHelp: 'Enable heart rate or cadence broadcasting on your device, then scan. I42FIT supports Bluetooth LE devices broadcasting HR or RSC. For Apple Watch, you can import a route.',
+    sensorReady: 'Ready to scan for a watch or sensor.', sensorStarting: 'Starting Bluetooth…',
+    sensorScanning: 'Searching for nearby devices…', sensorChoose: 'Select the device to connect.',
+    sensorConnecting: 'Connecting…', sensorConnected: 'Connected', sensorDisconnected: 'Device disconnected.',
+    sensorNone: 'No compatible device found. Enable broadcasting on the watch or sensor, then try again.',
+    sensorFailed: 'Could not connect or read sensor data.', sensorOff: 'Turn on Bluetooth on your iPhone.',
+    sensorDenied: 'Allow I42FIT to use Bluetooth in Settings.', sensorUnsupported: 'Bluetooth LE is unavailable on this device.',
+    sensorUnnamed: 'Bluetooth sensor', searchWatch: 'Find a watch or sensor',
+
+    nativeReady: 'Recording continues when the screen locks. Return here to finish the session.',
+    nativeTracking: 'Recording continues while the screen is locked.',
+    nativeSaving: 'Retrieving and saving session steps…',
+    nativeInterrupted: 'Recovered the saved portion of an interrupted workout.',
+    nativeSaveFailed: 'Could not save session data on this device.',
+    nativeSteps: 'Steps come from the iPhone pedometer.',
+    nativeLocationDenied: 'Allow I42FIT to access location while using the app in iPhone Settings.',
+
     activity: 'Activity', session: 'Activity session', type: 'Activity type', walk: 'Walk', run: 'Run', hike: 'Hike', bike: 'Cycle',
     steps: 'Steps', km: 'Kilometers', elapsed: 'Duration', start: 'Start recording', stop: 'Finish and save',
     ready: 'Keep this page open and your screen awake while recording.',
@@ -52,9 +102,12 @@ const labels = {
 };
 
 const $ = id => document.getElementById(id);
+const nativeTracker = window.webkit?.messageHandlers?.i42Workout;
+let nativeSaving = false;
+let nativeSensorState = {};
 const storageKey = 'i42-activity-sessions';
 const maxPoints = 6000;
-const activityKinds = ['walk', 'run', 'hike', 'bike'];
+const activityKinds = ['walk', 'run', 'hike', 'bike', 'padel', 'strength'];
 const read = (key, fallback) => {
   try {
     return JSON.parse(localStorage.getItem(key)) ?? fallback;
@@ -62,19 +115,54 @@ const read = (key, fallback) => {
     return fallback;
   }
 };
-const lang = read('lang', 'ar') === 'en' ? 'en' : 'ar';
+let lang = read('lang', 'ar') === 'en' ? 'en' : 'ar';
 const t = key => labels[lang][key];
-const formatNumber = new Intl.NumberFormat(lang);
-const formatKm = new Intl.NumberFormat(lang, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const formatDate = new Intl.DateTimeFormat(lang, { dateStyle: 'medium', timeStyle: 'short' });
-
-document.documentElement.lang = lang;
-document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+let formatNumber;
+let formatKm;
+let formatDate;
+const themePreference = matchMedia('(prefers-color-scheme: dark)');
 const theme = read('theme', null);
 if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
-document.title = t('activity') + ' | I42FIT';
-document.querySelectorAll('[data-label]').forEach(el => el.textContent = t(el.dataset.label));
-$('route-preview').setAttribute('aria-label', t('mapAlt'));
+
+function paintTheme() {
+  const active = document.documentElement.dataset.theme || (themePreference.matches ? 'dark' : 'light');
+  document.querySelectorAll('#themeSeg button').forEach(button => {
+    const selected = button.dataset.themeSet === active;
+    button.classList.toggle('on', selected);
+    button.setAttribute('aria-pressed', selected);
+  });
+}
+
+function applyLanguage() {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  formatNumber = new Intl.NumberFormat(lang);
+  formatKm = new Intl.NumberFormat(lang, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  formatDate = new Intl.DateTimeFormat(lang, { dateStyle: 'medium', timeStyle: 'short' });
+  document.title = t('activity') + ' | I42FIT';
+  document.querySelectorAll('[data-label], #app-header [data-i18n]').forEach(element => {
+    element.textContent = t(element.dataset.label ?? element.dataset.i18n);
+  });
+  $('app-navigation').setAttribute('aria-label', t('navigation'));
+  $('route-preview').setAttribute('aria-label', t('mapAlt'));
+  $('distance-scrubber').setAttribute('aria-label', t('distanceChart'));
+  $('themeSeg').setAttribute('aria-label', t('theme'));
+  document.querySelectorAll('#themeSeg button').forEach(button => {
+    button.title = t(button.dataset.themeSet);
+    button.setAttribute('aria-label', button.title);
+  });
+  document.querySelectorAll('#langSeg button').forEach(button => {
+    const selected = button.dataset.lang === lang;
+    button.classList.toggle('on', selected);
+    button.setAttribute('aria-pressed', selected);
+  });
+}
+
+function storePreference(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+}
+applyLanguage();
+paintTheme();
 
 let current = null;
 let pendingImport = null;
@@ -92,6 +180,10 @@ let map = null;
 let mapLayer = null;
 let mapLibrary = null;
 let mapFailed = false;
+let chartSession = null;
+let chartIndex = null;
+let chartSamples = [];
+let chartMarker = null;
 
 function distanceBetween(a, b) {
   const rad = Math.PI / 180;
@@ -128,8 +220,126 @@ function showStats(session) {
   $('distance').textContent = formatKm.format((session?.meters ?? 0) / 1000);
   const seconds = current ? (Date.now() - current.started) / 1000 : session?.seconds ?? 0;
   $('elapsed').textContent = elapsed(Math.max(0, seconds));
+  const km = (session?.meters ?? 0) / 1000;
+  const cycling = session?.kind === 'bike' || !session && $('kind').value === 'bike';
+  $('pace-label').textContent = t(cycling ? 'speed' : 'pace');
+  $('pace').textContent = km >= .02 && seconds > 0
+    ? (cycling ? formatKm.format(km * 3600 / seconds) : elapsed(seconds / km)) : '—';
+
+  const rate = current
+    ? (Date.now() - (current.heartRateAt ?? 0) <= 15000 ? current.heartRate : null)
+    : session?.averageHeartRate;
+  $('heart').textContent = Number.isFinite(rate) ? formatNumber.format(rate) : '—';
+  $('heart-label').textContent = t(current || !session ? 'heartLive' : 'heartAverage');
+  $('cadence').textContent = current && Number.isFinite(nativeSensorState.cadence) &&
+    Date.now() - (nativeSensorState.cadenceAt ?? 0) <= 15000 ? formatNumber.format(nativeSensorState.cadence) : '—';
   $('source').hidden = !session;
-  if (session) $('source').textContent = t(labels[lang][session.source] ? session.source : 'noSteps');
+  if (session) {
+    const peak = !current && Number.isFinite(session.maxHeartRate)
+      ? ' · ' + t('heartMax') + ' ' + formatNumber.format(session.maxHeartRate) : '';
+    $('source').textContent = t(labels[lang][session.source] ? session.source : 'noSteps') + peak;
+  }
+}
+
+function renderSplits(session) {
+  const times = Array.isArray(session?.splits)
+    ? session.splits.filter(seconds => Number.isFinite(seconds) && seconds >= 0).slice(0, 500) : [];
+  $('split-section').hidden = !times.length;
+  const longest = Math.max(1, ...times);
+  $('splits').replaceChildren(...times.map((seconds, i) => {
+    const row = document.createElement('li');
+    const lap = document.createElement('span');
+    lap.textContent = formatNumber.format(i + 1);
+    const bar = document.createElement('span');
+    bar.className = 'split-bar';
+    bar.setAttribute('aria-hidden', 'true');
+    bar.style.inlineSize = Math.max(5, seconds / longest * 100) + '%';
+    const time = document.createElement('strong');
+    time.textContent = elapsed(seconds);
+    row.append(lap, bar, time);
+    return row;
+  }));
+}
+
+function renderDistance(session) {
+  if (chartSession !== session?.id) {
+    chartSession = session?.id;
+    chartIndex = null;
+  }
+  chartSamples = Array.isArray(session?.distanceSamples)
+    ? session.distanceSamples.filter(sample => Array.isArray(sample) && sample.length === 4 &&
+        sample.every(Number.isFinite) && sample[0] >= 0 && sample[1] >= 0 && validPoint(sample.slice(2)))
+    : [];
+  const hasDistance = chartSamples.length >= 2 && chartSamples.at(-1)[1] > 0;
+  $('distance-data').hidden = !hasDistance;
+  $('distance-empty').hidden = hasDistance;
+  if (!hasDistance) {
+    $('distance-sample').textContent = '';
+    return;
+  }
+  const scrubber = $('distance-scrubber');
+  scrubber.max = String(chartSamples.length - 1);
+  scrubber.value = String(Math.min(chartIndex ?? chartSamples.length - 1, chartSamples.length - 1));
+  drawDistanceChart();
+}
+
+function drawDistanceChart() {
+  if ($('distance-data').hidden) return;
+  const sample = chartSamples[Number($('distance-scrubber').value)];
+  if (!sample) return;
+  const caption = elapsed(sample[0]) + ' · ' + formatKm.format(sample[1] / 1000) + ' ' + t('km');
+  $('distance-sample').textContent = caption;
+  $('distance-scrubber').setAttribute('aria-valuetext', caption);
+
+  const canvas = $('distance-chart');
+  const [width, height] = [canvas.clientWidth, canvas.clientHeight];
+  if (!width || !height) return;
+  const scale = Math.min(devicePixelRatio || 1, 3);
+  canvas.width = width * scale;
+  canvas.height = height * scale;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  const styles = getComputedStyle(document.documentElement);
+  const accent = styles.getPropertyValue('--accent').trim();
+  const [endSeconds, endMeters] = chartSamples.at(-1);
+  const left = 12;
+  const baseline = height - 12;
+  const x = seconds => left + seconds / Math.max(1, endSeconds) * (width - left * 2);
+  const y = meters => baseline - meters / Math.max(1, endMeters) * (height - 24);
+  ctx.scale(scale, scale);
+  ctx.strokeStyle = styles.getPropertyValue('--line').trim();
+  [0, .5, 1].forEach(tick => {
+    ctx.beginPath();
+    ctx.moveTo(left, y(endMeters * tick));
+    ctx.lineTo(width - left, y(endMeters * tick));
+    ctx.stroke();
+  });
+  ctx.beginPath();
+  ctx.moveTo(left, baseline);
+  chartSamples.forEach(([seconds, meters]) => ctx.lineTo(x(seconds), y(meters)));
+  ctx.lineWidth = 3;
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = accent;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(x(sample[0]), y(sample[1]), 5, 0, Math.PI * 2);
+  ctx.fillStyle = accent;
+  ctx.fill();
+}
+
+function syncChartMarker() {
+  const place = chartIndex === null ? null : chartSamples[chartIndex]?.slice(2);
+  if (!map) return;
+  if (!place) {
+    chartMarker?.remove();
+    chartMarker = null;
+    return;
+  }
+  if (chartMarker) chartMarker.setLatLng(place);
+  else chartMarker = L.circleMarker(place, {
+    radius: 8, color: '#fff', weight: 2, fillColor: '#c65017', fillOpacity: 1,
+  }).addTo(map);
+  chartMarker.bringToFront();
 }
 
 function drawPreview(paths) {
@@ -166,6 +376,15 @@ function drawPreview(paths) {
     ctx.arc(x, y, 5, 0, Math.PI * 2);
     ctx.fill();
   });
+  const place = chartIndex === null ? null : chartSamples[chartIndex]?.slice(2);
+  if (place) {
+    const [lat, lon] = place;
+    const [x, y] = project([(((lon - origin[1]) + 540) % 360 - 180) * centerLatitude, origin[0] - lat]);
+    ctx.beginPath();
+    ctx.arc(x, y, 7, 0, Math.PI * 2);
+    ctx.fillStyle = '#c65017';
+    ctx.fill();
+  }
 }
 
 function loadMap() {
@@ -212,10 +431,20 @@ function loadMap() {
 function renderRoute() {
   const paths = (current ?? pendingImport ?? selected)?.paths ?? [];
   const points = paths.flat();
+  const mapLink = $('google-endpoint');
+  const endpoint = points.at(-1);
+  mapLink.hidden = !endpoint || Boolean(current);
+  if (!mapLink.hidden) {
+    const url = new URL('https://www.google.com/maps/search/');
+    url.searchParams.set('api', '1');
+    url.searchParams.set('query', endpoint.join(','));
+    mapLink.href = url.href;
+  }
   $('map-empty').hidden = Boolean(points.length);
   $('map').hidden = !map || !points.length;
   $('route-preview').hidden = Boolean(map) || !points.length;
   if (!points.length) {
+    syncChartMarker();
     $('map-status').hidden = true;
     return;
   }
@@ -232,9 +461,11 @@ function renderRoute() {
   map.invalidateSize();
   mapLayer.clearLayers();
   L.polyline(paths, { color: '#087cb9', weight: 5 }).addTo(mapLayer);
+  if (points.length > 1) L.circleMarker(points[0], { radius: 5, color: '#fff', fillColor: '#137c5c', fillOpacity: 1 }).addTo(mapLayer);
   L.circleMarker(points.at(-1), { radius: 6, color: '#fff', fillColor: '#086ba8', fillOpacity: 1 }).addTo(mapLayer);
   if (points.length === 1) map.setView(points[0], 16);
   else map.fitBounds(points, { maxZoom: 17, padding: [22, 22] });
+  syncChartMarker();
 }
 
 function renderHistory() {
@@ -253,9 +484,9 @@ function renderHistory() {
     button.append(name, date);
     button.onclick = () => {
       selected = session;
+      $('kind').value = session.kind;
       updateView();
-      const active = $('sessions').querySelector('[aria-current="true"]');
-      active?.focus({ preventScroll: true });
+      $('session-title').focus();
     };
     li.append(button);
     return li;
@@ -264,25 +495,34 @@ function renderHistory() {
 
 function save(session, statusId) {
   selected = session;
+  let persisted = false;
   try {
     const sessions = [session, ...savedSessions().filter(s => s.id !== session.id)];
     localStorage.setItem(storageKey, JSON.stringify(sessions));
     $(statusId).textContent = t('saved');
+    persisted = true;
   } catch {
     $(statusId).textContent = t('saveFailed');
   }
   updateView();
+  return persisted;
 }
 
 function updateView() {
+  $('session-title').textContent = t(selected && !current && !pendingImport ? 'sessionSummary' : 'session');
   $('start').hidden = Boolean(current);
-  if (selected && !current && !pendingImport) $('kind').value = selected.kind;
+  if (current) $('kind').value = current.kind;
   $('start').disabled = Boolean(pendingImport);
   $('stop').hidden = !current;
+  $('stop').disabled = nativeSaving;
   $('kind').disabled = Boolean(current);
+  $('use-gps').disabled = Boolean(current);
   $('import').disabled = Boolean(current || pendingImport);
   $('import-details').hidden = !pendingImport;
-  showStats(current ?? pendingImport ?? selected);
+  const session = current ?? pendingImport ?? selected;
+  showStats(session);
+  renderSplits(session);
+  renderDistance(session);
   renderRoute();
   renderHistory();
 }
@@ -312,10 +552,13 @@ function recordPosition(session, position) {
     session.paths.at(-1).push(point);
     session.meters += meters;
   }
+  session.distanceSamples.push([Math.max(0, Math.round((position.timestamp - session.started) / 1000)),
+    Math.round(session.meters), ...point]);
   lastFix = { point, accuracy, time: position.timestamp };
   pointCount++;
   $('tracking-status').textContent = t('tracking');
   showStats(session);
+  renderDistance(session);
   renderRoute();
 }
 
@@ -354,18 +597,23 @@ async function enableMotion(session) {
 function startTracking() {
   if (current || pendingImport) return;
   const kind = $('kind').value;
-  current = { id: crypto.randomUUID(), started: Date.now(), seconds: 0, kind, meters: 0, steps: null, paths: [],
+  const useGPS = $('use-gps').checked;
+  if (nativeTracker) {
+    nativeTracker.postMessage({ action: 'start', kind, gps: useGPS ? 'on' : 'off' });
+    return;
+  }
+  current = { id: crypto.randomUUID(), started: Date.now(), seconds: 0, kind, meters: 0, steps: null, paths: [], distanceSamples: [],
     source: kind === 'bike' ? 'bikeSteps' : 'noSteps' };
   const session = current;
   pointCount = 0;
   lastFix = lastSignal = motionSample = cadenceSample = null;
   enableMotion(session);
-  $('tracking-status').textContent = t('gpsWaiting');
-  if (navigator.geolocation) {
+  $('tracking-status').textContent = t(useGPS ? 'gpsWaiting' : 'trackingNoGPS');
+  if (useGPS && navigator.geolocation) {
     fixId = navigator.geolocation.watchPosition(position => recordPosition(session, position), error => {
       if (current === session) $('tracking-status').textContent = t(error.code === 1 ? 'gpsDenied' : 'gpsUnavailable');
     }, { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 });
-  } else {
+  } else if (useGPS) {
     $('tracking-status').textContent = t('gpsUnavailable');
   }
   timer = setInterval(() => showStats(current), 500);
@@ -375,6 +623,10 @@ function startTracking() {
 
 function finishTracking() {
   if (!current) return;
+  if (nativeTracker) {
+    nativeTracker.postMessage({ action: 'stop' });
+    return;
+  }
   const session = current;
   current = null;
   if (fixId !== null) navigator.geolocation.clearWatch(fixId);
@@ -534,6 +786,8 @@ async function connectWatch() {
 
 $('start').onclick = startTracking;
 $('stop').onclick = finishTracking;
+$('watch-shortcut').onclick = () => $('watch-title').focus();
+$('kind').onchange = () => showStats(current ?? pendingImport ?? selected);
 $('connect').onclick = connectWatch;
 $('import').onclick = () => $('route-file').click();
 $('route-file').onchange = event => {
@@ -560,12 +814,113 @@ $('cancel-import').onclick = () => {
   $('import').focus();
 };
 
-window.addEventListener('resize', renderRoute);
+$('distance-scrubber').oninput = event => {
+  chartIndex = Number(event.target.value);
+  drawDistanceChart();
+  syncChartMarker();
+  if (!map) renderRoute();
+  if (map && chartMarker && !map.getBounds().contains(chartMarker.getLatLng())) {
+    map.panTo(chartMarker.getLatLng());
+  }
+};
+
+$('langSeg').onclick = event => {
+  const button = event.target.closest('button[data-lang]');
+  if (!button || lang === button.dataset.lang) return;
+  const previous = labels[lang];
+  const statuses = ['tracking-status', 'watch-status'].map(id => [
+    id, Object.keys(previous).find(key => previous[key] === $(id).textContent),
+  ]);
+  lang = button.dataset.lang;
+  storePreference('lang', lang);
+  applyLanguage();
+  for (const [id, key] of statuses) if (key) $(id).textContent = t(key);
+  if (nativeTracker) {
+    document.querySelector('[data-label="watchHelp"]').textContent = t('sensorHelp');
+    window.i42NativeSensors(nativeSensorState);
+  }
+  updateView();
+};
+
+$('themeSeg').onclick = event => {
+  const button = event.target.closest('button[data-theme-set]');
+  if (!button) return;
+  document.documentElement.dataset.theme = button.dataset.themeSet;
+  storePreference('theme', button.dataset.themeSet);
+  paintTheme();
+  drawDistanceChart();
+  if (!map) renderRoute();
+};
+themePreference.addEventListener?.('change', () => {
+  paintTheme();
+  drawDistanceChart();
+});
+const updateNetwork = () => { $('netPill').hidden = navigator.onLine; };
+window.addEventListener('online', updateNetwork);
+window.addEventListener('offline', updateNetwork);
+updateNetwork();
+window.addEventListener('resize', () => {
+  renderRoute();
+  drawDistanceChart();
+});
 window.addEventListener('pagehide', () => {
-  finishTracking();
+  if (!nativeTracker) finishTracking();
   watchDevice?.gatt.disconnect();
 });
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 updateView();
+
+if (nativeTracker) {
+  const connect = $('connect');
+  document.querySelector('[data-label="watchHelp"]').textContent = t('sensorHelp');
+  window.i42NativeSensors = state => {
+    nativeSensorState = state;
+    const connected = state.status === 'sensorConnected';
+    connect.textContent = t(connected ? 'disconnect' : 'searchWatch');
+    connect.disabled = ['sensorStarting', 'sensorConnecting', 'sensorScanning'].includes(state.status);
+    const status = $('sensor-status');
+    status.hidden = false;
+    status.textContent = [t(state.status) ?? t('sensorReady'), state.name].filter(Boolean).join(' · ');
+    const devices = Array.isArray(state.devices) ? state.devices : [];
+    const list = $('sensor-list');
+    list.hidden = !devices.length;
+    list.replaceChildren(...devices.map(device => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = device.name || t('sensorUnnamed');
+      button.onclick = () => nativeTracker.postMessage({ action: 'sensorSelect', id: device.id });
+      const item = document.createElement('li');
+      item.append(button);
+      return item;
+    }));
+    if (current) showStats(current);
+  };
+  connect.onclick = () => nativeTracker.postMessage({
+    action: nativeSensorState.status === 'sensorConnected' ? 'sensorDisconnect' : 'sensorScan',
+  });
+  let lastAcknowledged = null;
+  const convert = workout => ({
+    ...workout,
+    steps: workout.steps ?? null,
+    source: workout.kind === 'bike' ? 'bikeSteps' : workout.steps == null ? 'noSteps' : 'nativeSteps',
+  });
+  window.i42NativeActivity = state => {
+    current = state.current ? convert(state.current) : null;
+    nativeSaving = state.status === 'nativeSaving';
+    $('tracking-status').textContent = t(state.status) ?? t('nativeReady');
+    if (state.completed && lastAcknowledged !== state.completed.id) {
+      if (save(convert(state.completed), 'tracking-status')) {
+        lastAcknowledged = state.completed.id;
+        if (state.status === 'nativeInterrupted') $('tracking-status').textContent = t(state.status);
+        nativeTracker.postMessage({ action: 'ack', id: lastAcknowledged });
+      }
+    } else {
+      updateView();
+    }
+  };
+  $('tracking-status').textContent = t('nativeReady');
+  setInterval(() => { if (current) showStats(current); }, 500);
+  nativeTracker.postMessage({ action: 'snapshot' });
+}

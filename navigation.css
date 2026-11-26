@@ -1,0 +1,64 @@
+:root{
+  --bg:#F5F4EE; --surface:#FFFFFF; --surface2:#EFEDE4; --text:#1F1E1D; --muted:#6B6A63;
+  --line:#E3E0D5; --accent:#086BA8; --accent-ink:#FFFFFF; --accent-soft:#DDF1FC;
+  --serif:"Source Serif 4","Noto Naskh Arabic", Georgia, serif; --sans:"IBM Plex Sans Arabic", system-ui, sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#262624; --surface:#30302E; --surface2:#3A3A37; --text:#F2F0E8; --muted:#A6A39A;
+  --line:#45443F; --accent-soft:#203E50; --accent:#68C7FB; --accent-ink:#132D40; color-scheme:dark; } }
+:root[data-theme="dark"]{ --bg:#262624; --surface:#30302E; --surface2:#3A3A37; --text:#F2F0E8; --muted:#A6A39A; --line:#45443F; --accent-soft:#203E50; --accent:#68C7FB; --accent-ink:#132D40; color-scheme:dark; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.7;transition:background .25s,color .25s}
+.wrap{max-width:920px;margin:0 auto;padding:calc(24px + env(safe-area-inset-top)) calc(16px + env(safe-area-inset-right)) calc(80px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left))}
+html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+
+h1,h2,h3{font-family:var(--serif);font-weight:600;margin:0}
+h2{font-size:1.5rem;margin-bottom:6px} h3{font-size:1.1rem}
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 24px;
+  padding: 5px;
+  border-radius: 12px;
+  background: var(--surface2);
+}
+
+.tabs .tab {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  place-items: center;
+  padding: 10px 4px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font: 600 1rem/1.5 var(--sans);
+  text-align: center;
+  text-decoration: none;
+  touch-action: manipulation;
+}
+
+.tabs .tab[href] { cursor: pointer; }
+
+.tabs .tab.on {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+}
+
+.app-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;direction:ltr}
+.logo{display:block;width:40px;height:40px;border-radius:10px;flex:none}
+.word{font-family:"Source Serif 4",Georgia,serif;font-weight:700;font-size:1.6rem;letter-spacing:-.5px;line-height:1}
+.word span{color:var(--accent);font-family:var(--sans);font-weight:600;font-size:.62em;letter-spacing:3px;margin-inline-start:4px}
+.tools{display:flex;gap:8px;align-items:center}
+.seg{display:flex;background:var(--surface2);border-radius:10px;padding:3px;gap:2px}
+.app-header .seg button{min-height:36px;border:0;background:transparent;color:var(--muted);font:600 .85rem var(--sans);min-width:40px;height:36px;padding:0 10px;border-radius:8px;cursor:pointer;display:grid;place-items:center}
+.app-header .seg button.on{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.app-header .seg svg{display:block;width:18px;height:18px;flex:none}
+
+.app-header .pill{background:var(--accent-soft);color:var(--accent);font-size:.8rem;font-weight:600;padding:4px 10px;border-radius:99px}
